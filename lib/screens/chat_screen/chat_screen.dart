@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jokes_ai_app/screens/chat_screen/widgets/welcome_template.dart';
+import 'package:jokes_ai_app/widgets/welcome_template.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen(
