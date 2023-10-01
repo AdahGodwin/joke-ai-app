@@ -46,7 +46,8 @@ class ChatListScreen extends StatelessWidget {
                       alignment: const AlignmentDirectional(-1, 0),
                       foregroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
                 ),
@@ -105,8 +106,14 @@ class ChatListScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 17,
                       backgroundColor: Colors.grey[100],
-                      child: const Icon(
-                        Icons.delete_outline,
+                      child: IconButton(
+                        onPressed: () {
+                          // Provider.of<ChatsProvider>(context, listen: false)
+                          //     .clearChats();
+                        },
+                        icon: const Icon(
+                          Icons.delete_outline,
+                        ),
                         color: Colors.black54,
                       ),
                     ),

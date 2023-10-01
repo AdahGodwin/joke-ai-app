@@ -47,7 +47,7 @@ class ChatScreen extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                chat.messages?.length == null
+                chat.messages!.isEmpty
                     ? const Expanded(
                         child: SingleChildScrollView(
                           child: WelcomeTemplate(),

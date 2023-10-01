@@ -73,6 +73,7 @@ class ChatsProvider with ChangeNotifier {
           userId: userId,
           chatId: chatId,
           chatTitle: "New Chat",
+          messages: [],
         ));
     if (notify == true) {
       notifyListeners();
@@ -83,7 +84,6 @@ class ChatsProvider with ChangeNotifier {
 
   Chat getChatbyId(String id) {
     List<Chat> chat = _chatList.where((chat) => chat.chatId == id).toList();
-
     return chat[0];
   }
 
@@ -98,6 +98,11 @@ class ChatsProvider with ChangeNotifier {
   void sendMessage(Map<String, dynamic> message, String chatId) {
     Chat chat = _chatList.where((chat) => chat.chatId == chatId).toList()[0];
     chat.messages?.add(message);
+    notifyListeners();
+  }
+
+  void clearChats() {
+    _chatList.clear();
     notifyListeners();
   }
 }

@@ -21,6 +21,7 @@ class _NavScreenState extends State<NavScreen> {
   @override
   void initState() {
     super.initState();
+
     selectedChatId = Provider.of<ChatsProvider>(context, listen: false)
         .getRecentChatId("user1");
   }

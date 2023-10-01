@@ -15,8 +15,8 @@ class NewMessage extends StatefulWidget {
 
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
+
   void _sendMessage(String messageId) {
-    FocusScope.of(context).unfocus();
     if (_messageController.text.trim().isNotEmpty) {
       Provider.of<ChatsProvider>(context, listen: false).sendMessage(
         {"sender": "user1", "message": _messageController.text},
