@@ -14,14 +14,25 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Home Screen'),
+          title: const Text('Jokes AI'),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Good Morning Samuel!'),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.grey[100],
+                ),
+                padding: const EdgeInsets.all(4.0),
+                child: IconButton(
+                    icon: Image.asset('assets/icons/menu-icon.png'),
+                    onPressed: () {}),
+              ),
+              const Text('Good Morning Godwin!'),
               const Text('You have several jokes, pick below to continue'),
               const SizedBox(
                 height: 20.0,
