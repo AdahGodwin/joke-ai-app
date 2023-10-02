@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:jokes_ai_app/widgets/joke_suggestion.dart';
+import 'package:jokes_ai_app/widgets/new_message.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({
+    super.key,
+  });
+  // final String selectedChatId;
+
+  String selectedChatId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +41,8 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Expanded(child: JokeSuggestion())
+              Expanded(child: JokeSuggestion()),
+              NewMessage(chatId: selectedChatId)
             ],
           ),
         ));

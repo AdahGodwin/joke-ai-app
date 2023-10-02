@@ -34,7 +34,6 @@ class JokeSuggestion extends StatelessWidget {
               return Container(
                 padding: const EdgeInsets.all(8.0),
                 margin: const EdgeInsets.all(8.0),
-                // decoration: const BoxDecoration(color: Colors.red),
                 color: Colors.lightBlue[50],
                 child: ListTile(
                   title: Text(suggestedJokes[index].jokeTitle),
