@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jokes_ai_app/models/joke_suggestion_data.dart';
 
@@ -25,6 +27,7 @@ class JokeSuggestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Random random = Random();
     return Column(
       children: [
         Expanded(
@@ -32,18 +35,27 @@ class JokeSuggestion extends StatelessWidget {
             itemCount: suggestedJokes.length,
             itemBuilder: (context, index) {
               return Container(
-                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color((random.nextDouble() * 0xFFFFFF).toInt())
+                      .withOpacity(1.0),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 margin: const EdgeInsets.all(8.0),
-                color: Colors.lightBlue[50],
                 child: ListTile(
-                  title: Text(suggestedJokes[index].jokeTitle),
-                  trailing: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_forward),
+                  title: Text(
+                    suggestedJokes[index].jokeTitle,
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    // print('ListTile tapped');
-                  },
+                  trailing: Transform.scale(
+                    scale:
+                        0.8, 
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.arrow_forward),
+                    ),
+                  ),
+                  onTap: () {},
                 ),
               );
             },

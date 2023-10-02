@@ -1,16 +1,26 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:jokes_ai_app/models/scrolling_card_data.dart';
 
 class ScrollingCards extends StatelessWidget {
-  final List<String> cardTitles = [
-    'Card 1',
-    'Card 2',
-    'Card 3',
+  final List<ScrollingCardData> cardTitles = [
+    ScrollingCardData(
+        jokeTitle: 'This is the funniest thing you have heard all year'),
+    ScrollingCardData(
+        jokeTitle:
+            'Why did the chicken cross the road asks the curious passerby'),
+    ScrollingCardData(
+        jokeTitle: 'This is the funniest thing you have heard all year'),
+    ScrollingCardData(
+        jokeTitle: 'This is the funniest thing you have heard all year'),
   ];
 
   ScrollingCards({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Random random = Random();
     return SizedBox(
       height: 200,
       child: ListView.builder(
@@ -18,16 +28,38 @@ class ScrollingCards extends StatelessWidget {
         itemCount: cardTitles.length,
         itemBuilder: (context, index) {
           return SizedBox(
-            width: MediaQuery.of(context).size.width - 50, // Width of each card
+            width: MediaQuery.of(context).size.width - 100,
             child: Card(
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 10.0, vertical: 10.0), // Margin around each card
-              child: Center(
-                child: Text(
-                  cardTitles[index],
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+              // color: Colors.blueAccent,
+              color: Color((random.nextDouble() * 0xFFFFFF).toInt())
+                  .withOpacity(1.0),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Image.asset(
+                      'assets/images/spring.png',
+                      height: 70,
+                      width: 100,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      // color: Colors.black54,
+                      child: Text(
+                        cardTitles[index].jokeTitle,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
