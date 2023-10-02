@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jokes_ai_app/widgets/joke_suggestion.dart';
 import 'package:jokes_ai_app/widgets/new_message.dart';
+import 'package:jokes_ai_app/widgets/scrolling_cards.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({
     super.key,
   });
-  // final String selectedChatId;
 
   String selectedChatId = "";
 
@@ -26,13 +26,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 20.0,
               ),
-              Container(
-                decoration: const BoxDecoration(color: Colors.yellowAccent),
-                height: 200,
-                child: const Center(
-                  child: Text('Customize widget here'),
-                ),
-              ),
+              ScrollingCards(),
               const SizedBox(
                 height: 20.0,
               ),
@@ -42,7 +36,21 @@ class HomeScreen extends StatelessWidget {
                 height: 20,
               ),
               Expanded(child: JokeSuggestion()),
-              NewMessage(chatId: selectedChatId)
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                height: 60,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
+                ),
+                child: NewMessage(
+                  chatId: selectedChatId,
+                ),
+              ),
             ],
           ),
         ));
