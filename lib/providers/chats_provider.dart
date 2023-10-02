@@ -92,7 +92,14 @@ class ChatsProvider with ChangeNotifier {
       String chatId = createChat(userId, false);
       return chatId;
     }
-    return _chatList[0].chatId;
+
+    List<Chat> emptyChat =
+        _chatList.where((chat) => chat.messages!.isEmpty).toList();
+    if (emptyChat.isEmpty) {
+      String chatId = createChat(userId, false);
+      return chatId;
+    }
+    return emptyChat[0].chatId;
   }
 
   void sendMessage(Map<String, dynamic> message, String chatId) {
