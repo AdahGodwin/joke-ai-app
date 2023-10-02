@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jokes_ai_app/providers/chats_provider.dart';
-import 'package:jokes_ai_app/screens/menu/nav_screen.dart';
+import 'package:jokes_ai_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const NavScreen(),
+        home: const HomeScreen(),
       ),
     );
   }
