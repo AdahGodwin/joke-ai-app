@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jokes_ai_app/providers/chats_provider.dart';
+import 'package:jokes_ai_app/screens/home_screen.dart';
 import 'package:jokes_ai_app/providers/openai.dart';
 import 'package:jokes_ai_app/screens/Auth/login_screen.dart';
 import 'package:jokes_ai_app/screens/Auth/signup_screen.dart';
@@ -28,12 +29,12 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Jokes AI',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const NavScreen(),
+        home: HomeScreen(),
         routes: {
           '/signup': (context) => const RegistrationForm(),
           '/login': (context) => const LoginForm(),
