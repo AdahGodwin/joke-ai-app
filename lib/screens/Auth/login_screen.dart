@@ -126,13 +126,13 @@ class LoginFormState extends State<LoginForm> {
                             await authRepository.signIn(email, password);
                         if (result != null) {
                           // Registration failed, display an error message
-                          final data = result;
+                          // final data = result;
 
-                          print('${data.id}');
+                          // print('${data.id}');
                           if (!context.mounted) return;
                           // Navigator.of(context).pushNamed("/home");
                         } else {
-                          print('errror:   eeeeeee');
+                          // print('errror:   eeeeeee');
                         }
                       },
                       child: Text(

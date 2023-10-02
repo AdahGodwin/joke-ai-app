@@ -171,11 +171,11 @@ class RegistrationFormState extends State<RegistrationForm> {
                         if (data != null) {
                           // Registration failed, display an error message
 
-                          print('sign up result: >>> $data');
+                          // print('sign up result: >>> $data');
                           // if (!context.mounted) return;
                           // Navigator.of(context).pushNamed("/home");
                         } else {
-                          print('errror:   eeeeeee');
+                          // print('errror:   eeeeeee');
                         }
                       },
                       child: Text(
