@@ -10,8 +10,9 @@ class CurrentScreen extends StatelessWidget {
     super.key,
     required this.closeDrawer,
     required this.openDrawer,
+    required this.selectedChatId,
   });
-
+  final String selectedChatId;
   final bool isDrawerOpen;
   final VoidCallback openDrawer;
   final VoidCallback closeDrawer;
@@ -46,6 +47,7 @@ class CurrentScreen extends StatelessWidget {
                 openDrawer: openDrawer,
                 closeDrawer: closeDrawer,
                 isDrawerOpen: isDrawerOpen,
+                selectedChatId: selectedChatId,
               )),
         ),
       ),

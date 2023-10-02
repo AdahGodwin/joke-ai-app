@@ -114,6 +114,7 @@ class WelcomeTemplate extends StatelessWidget {
             ),
           ),
         ),
+        // const Spacer(),
       ],
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:jokes_ai_app/screens/menu/chat_list_screen.dart';
 import 'package:jokes_ai_app/screens/menu/current_screen.dart';
+import 'package:provider/provider.dart';
 
 class NavScreen extends StatefulWidget {
   const NavScreen({super.key});
@@ -14,6 +16,23 @@ class _NavScreenState extends State<NavScreen> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool isDrawerOpen = false;
+  String selectedChatId = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    selectedChatId = Provider.of<ChatsProvider>(context, listen: false)
+        .getRecentChatId("user1");
+  }
+
+  void setChatId(id) {
+    setState(() {
+      selectedChatId = id;
+    });
+
+    closeDrawer();
+  }
 
   void openDrawer() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -50,14 +69,19 @@ class _NavScreenState extends State<NavScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          const ChatListScreen(),
+          ChatListScreen(
+            setChatId: setChatId,
+            selectedChatId: selectedChatId,
+          ),
           CurrentScreen(
-              isDrawerOpen: isDrawerOpen,
-              xOffset: xOffset,
-              yOffset: yOffset,
-              scaleFactor: scaleFactor,
-              closeDrawer: closeDrawer,
-              openDrawer: openDrawer),
+            isDrawerOpen: isDrawerOpen,
+            xOffset: xOffset,
+            yOffset: yOffset,
+            scaleFactor: scaleFactor,
+            closeDrawer: closeDrawer,
+            openDrawer: openDrawer,
+            selectedChatId: selectedChatId,
+          ),
         ],
       ),
     );
