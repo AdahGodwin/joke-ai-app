@@ -87,6 +87,12 @@ class ChatsProvider with ChangeNotifier {
     return chat[0];
   }
 
+  Chat getRecentChat(id) {
+    List<Chat> chat = _chatList.where((chat) => chat.chatId == id).toList();
+
+    return chat[0];
+  }
+
   String getRecentChatId(userId) {
     if (_chatList.isEmpty) {
       String chatId = createChat(userId, false);

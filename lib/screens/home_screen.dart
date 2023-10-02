@@ -4,11 +4,17 @@ import 'package:jokes_ai_app/widgets/new_message.dart';
 import 'package:jokes_ai_app/widgets/scrolling_cards.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({
+  const HomeScreen({
     super.key,
+    required this.openDrawer,
+    required this.closeDrawer,
+    required this.isDrawerOpen,
+    required this.selectedChatId,
   });
-
-  String selectedChatId = "";
+  final VoidCallback openDrawer;
+  final VoidCallback closeDrawer;
+  final bool isDrawerOpen;
+  final String selectedChatId;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +35,9 @@ class HomeScreen extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(4.0),
                 child: IconButton(
-                    icon: Image.asset('assets/icons/menu-icon.png'),
-                    onPressed: () {}),
+                  icon: Image.asset('assets/icons/menu-icon.png'),
+                  onPressed: isDrawerOpen ? closeDrawer : openDrawer,
+                ),
               ),
               const Text('Good Morning Godwin!'),
               const Text('You have several jokes, pick below to continue'),
