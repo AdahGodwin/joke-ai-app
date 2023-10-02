@@ -38,7 +38,7 @@ dependencies:
   provider: ^6.0.5
   intl: ^0.18.1
   http: ^1.1.0
-  hng_authentication: ^0.0.3
+  hng_authentication: ^0.1.2
   google_fonts: ^6.1.0
   
 dev_dependencies:

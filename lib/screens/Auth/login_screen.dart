@@ -1,8 +1,6 @@
-// import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:hng_authentication/authentication.dart';
+import 'package:hng_authentication/authentication.dart';
 import 'package:hng_authentication/widgets/rounded_bordered_textfield.dart';
 
 class LoginForm extends StatefulWidget {
@@ -121,21 +119,21 @@ class LoginFormState extends State<LoginForm> {
                         ),
                       ),
                       onPressed: () async {
-                        // final email = (emailController).text;
-                        // final password = (passwordController).text;
-                        // final authRepository = Authentication();
-                        // final result =
-                        //     await authRepository.signIn(email, password);
-                        // if (result != null) {
-                        //   // Registration failed, display an error message
-                        //   final data = json.decode(result.body);
+                        final email = (emailController).text;
+                        final password = (passwordController).text;
+                        final authRepository = Authentication();
+                        final result =
+                            await authRepository.signIn(email, password);
+                        if (result != null) {
+                          // Registration failed, display an error message
+                          final data = result;
 
-                        //   print('sign up result: >>> $data');
-                        //   if (!context.mounted) return;
-                        //   Navigator.of(context).pushNamed("/home");
-                        // } else {
-                        //   print('errror:   eeeeeee');
-                        // }
+                          print('${data.id}');
+                          if (!context.mounted) return;
+                          // Navigator.of(context).pushNamed("/home");
+                        } else {
+                          print('errror:   eeeeeee');
+                        }
                       },
                       child: Text(
                         "Login",
