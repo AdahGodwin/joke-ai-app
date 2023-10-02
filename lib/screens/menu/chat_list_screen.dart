@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jokes_ai_app/providers/chats_provider.dart';
+import 'package:jokes_ai_app/providers/openai.dart';
 import 'package:provider/provider.dart';
 
 class ChatListScreen extends StatelessWidget {
@@ -108,8 +109,8 @@ class ChatListScreen extends StatelessWidget {
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
                         onPressed: () {
-                          // Provider.of<ChatsProvider>(context, listen: false)
-                          //     .clearChats();
+                          Provider.of<OpenAi>(context, listen: false)
+                              .sendRequest();
                         },
                         icon: const Icon(
                           Icons.delete_outline,
