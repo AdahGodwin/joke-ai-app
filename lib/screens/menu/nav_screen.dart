@@ -17,7 +17,7 @@ class _NavScreenState extends State<NavScreen> {
   double scaleFactor = 1;
   bool isDrawerOpen = false;
   String selectedChatId = "";
-
+  bool showChat = false;
   @override
   void initState() {
     super.initState();
@@ -28,6 +28,7 @@ class _NavScreenState extends State<NavScreen> {
   void setChatId(id) {
     setState(() {
       selectedChatId = id;
+      showChat = true;
     });
 
     closeDrawer();
@@ -80,6 +81,7 @@ class _NavScreenState extends State<NavScreen> {
             closeDrawer: closeDrawer,
             openDrawer: openDrawer,
             selectedChatId: selectedChatId,
+            showChat: showChat,
           ),
         ],
       ),
