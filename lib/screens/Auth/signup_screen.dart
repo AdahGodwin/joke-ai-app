@@ -115,6 +115,18 @@ class RegistrationFormState extends State<RegistrationForm> {
                         });
                       },
                     ),
+                    validator: (val) {
+                      if (val?.isEmpty ?? true) {
+                        return 'Please enter your password';
+                      } else if ((val?.length ?? 0) < 8) {
+                        return 'Password is not up to 8 characters';
+                      } else if (((val?.length ?? 0) >= 8) &&
+                          ((val ?? "") != passwordController.text)) {
+                        return "Password texts don't match";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -125,9 +137,9 @@ class RegistrationFormState extends State<RegistrationForm> {
                     validator: (val) {
                       if (val?.isEmpty ?? true) {
                         return 'Please enter your password';
-                      } else if ((val?.length ?? 0) < 6) {
-                        return 'Password is not up to 6 characters';
-                      } else if (((val?.length ?? 0) >= 6) &&
+                      } else if ((val?.length ?? 0) < 8) {
+                        return 'Password is not up to 8 characters';
+                      } else if (((val?.length ?? 0) >= 8) &&
                           ((val ?? "") != passwordController.text)) {
                         return "Password texts don't match";
                       } else {
