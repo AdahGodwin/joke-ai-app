@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hng_authentication/authentication.dart';
 import 'package:hng_authentication/widgets/rounded_bordered_textfield.dart';
+import 'package:hng_authentication/widgets/widget.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -14,7 +15,7 @@ class LoginFormState extends State<LoginForm> {
   bool _obscurePassword = true;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -109,45 +110,81 @@ class LoginFormState extends State<LoginForm> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.blue,
-                        ),
-                      ),
-                      onPressed: () async {
-                        final email = (emailController).text;
-                        final password = (passwordController).text;
-                        final authRepository = Authentication();
-                        final result =
-                            await authRepository.signIn(email, password);
-                        if (result != null) {
-                          // Registration failed, display an error message
-                          // final data = result;
+                  isLoading == true
+                      ? const CircularProgressIndicator(
+                          color: Colors.blue,
+                        )
+                      : SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.blue,
+                              ),
+                            ),
+                            onPressed: emailController.text.isEmpty |
+                                    passwordController.text.isEmpty
+                                ? null
+                                : () async {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    final email = (emailController).text;
+                                    final password = (passwordController).text;
+                                    final authRepository = Authentication();
 
-                          // print('${data.id}');
-                          if (!context.mounted) return;
-                          // Navigator.of(context).pushNamed("/home");
-                        } else {
-                          // print('errror:   eeeeeee');
-                        }
-                      },
-                      child: Text(
-                        "Login",
-                        style: GoogleFonts.lato(
-                          textStyle: const TextStyle(
-                            letterSpacing: .16,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                                    try {
+                                      final data = await authRepository.signIn(
+                                          email, password);
+                                      if (data != null) {
+                                        print('sign up result: >>> $data');
+                                        if (!context.mounted) return;
+                                        showSnackbar(context, Colors.blue,
+                                            "Sign in Successfull");
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context)
+                                            .pushReplacementNamed("/home");
+                                      } else {
+                                        if (!context.mounted) return;
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        showSnackbar(
+                                          context,
+                                          Colors.red,
+                                          "An Error Occured",
+                                        );
+                                      }
+                                    } catch (error) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      if (!context.mounted) return;
+
+                                      showSnackbar(
+                                        context,
+                                        Colors.red,
+                                        "An Error Occured",
+                                      );
+                                      print(error);
+                                    }
+                                  },
+                            child: Text(
+                              "Login",
+                              style: GoogleFonts.lato(
+                                textStyle: const TextStyle(
+                                  letterSpacing: .16,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                   const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
