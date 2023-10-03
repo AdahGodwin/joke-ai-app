@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hng_authentication/authentication.dart';
 import 'package:hng_authentication/widgets/rounded_bordered_textfield.dart';
+import 'package:hng_authentication/widgets/widget.dart';
 
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({super.key});
@@ -13,6 +14,7 @@ class RegistrationForm extends StatefulWidget {
 class RegistrationFormState extends State<RegistrationForm> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool isLoading = false;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -20,7 +22,6 @@ class RegistrationFormState extends State<RegistrationForm> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -152,45 +153,83 @@ class RegistrationFormState extends State<RegistrationForm> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Colors.blue,
-                        ),
-                      ),
-                      onPressed: () async {
-                        final email = (emailController).text;
-                        final password = (passwordController).text;
-                        final name = nameController.text;
-                        final authRepository = Authentication();
-                        final data =
-                            await authRepository.signUp(email, name, password);
-                        if (data != null) {
-                          // Registration failed, display an error message
+                  isLoading == true
+                      ? const CircularProgressIndicator(
+                          color: Colors.blue,
+                        )
+                      : SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.blue,
+                              ),
+                            ),
+                            onPressed: nameController.text.isEmpty |
+                                    emailController.text.isEmpty |
+                                    passwordController.text.isEmpty
+                                ? null
+                                : () async {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    final email = (emailController).text;
+                                    final password = (passwordController).text;
+                                    final name = nameController.text;
+                                    final authRepository = Authentication();
 
-                          // print('sign up result: >>> $data');
-                          // if (!context.mounted) return;
-                          // Navigator.of(context).pushNamed("/home");
-                        } else {
-                          // print('errror:   eeeeeee');
-                        }
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: GoogleFonts.lato(
-                          textStyle: const TextStyle(
-                            letterSpacing: .16,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
+                                    try {
+                                      final data = await authRepository.signUp(
+                                          email, name, password);
+                                      if (data != null) {
+                                        print('sign up result: >>> $data');
+                                        if (!context.mounted) return;
+                                        showSnackbar(context, Colors.blue,
+                                            "Registration Successfull");
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        Navigator.of(context)
+                                            .pushReplacementNamed("/login");
+                                      } else {
+                                        if (!context.mounted) return;
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                        showSnackbar(
+                                          context,
+                                          Colors.red,
+                                          "An Error Occured",
+                                        );
+                                      }
+                                    } catch (error) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      if (!context.mounted) return;
+
+                                      showSnackbar(
+                                        context,
+                                        Colors.red,
+                                        "Registration Unsuccessful",
+                                      );
+                                      print(error);
+                                    }
+                                  },
+                            child: Text(
+                              "Sign Up",
+                              style: GoogleFonts.lato(
+                                textStyle: const TextStyle(
+                                  letterSpacing: .16,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                   const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

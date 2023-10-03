@@ -50,20 +50,21 @@ class CurrentScreen extends StatelessWidget {
         child: AbsorbPointer(
           absorbing: isDrawerOpen,
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-              child: selectedChat.messages!.isEmpty & showChat == false
-                  ? HomeScreen(
-                      openDrawer: openDrawer,
-                      closeDrawer: closeDrawer,
-                      isDrawerOpen: isDrawerOpen,
-                      selectedChatId: selectedChatId,
-                    )
-                  : ChatScreen(
-                      openDrawer: openDrawer,
-                      closeDrawer: closeDrawer,
-                      isDrawerOpen: isDrawerOpen,
-                      selectedChatId: selectedChatId,
-                    )),
+            borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
+            child: selectedChat.messages!.isEmpty & showChat == false
+                ? HomeScreen(
+                    openDrawer: openDrawer,
+                    closeDrawer: closeDrawer,
+                    isDrawerOpen: isDrawerOpen,
+                    selectedChatId: selectedChatId,
+                  )
+                : ChatScreen(
+                    openDrawer: openDrawer,
+                    closeDrawer: closeDrawer,
+                    isDrawerOpen: isDrawerOpen,
+                    selectedChatId: selectedChatId,
+                  ),
+          ),
         ),
       ),
     );
