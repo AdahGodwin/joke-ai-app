@@ -20,9 +20,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jokes AI'),
+        title: const Text(
+          'Jokes AI',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
       ),
-      body: Padding(
+      body: Container(
+        // color: Colors.grey[100],
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Stack(
           children: [
@@ -41,7 +45,10 @@ class HomeScreen extends StatelessWidget {
                     onPressed: isDrawerOpen ? closeDrawer : openDrawer,
                   ),
                 ),
-                const Text('Good Morning Godwin!'),
+                const Text(
+                  'Good Morning Godwin!',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
                 const Text('You have several jokes, pick below to continue'),
                 const SizedBox(
                   height: 20.0,
@@ -50,15 +57,16 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                const Text('Suggested Jokes'),
+                const Text(
+                  'Suggested Jokes',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
                 const Text('Ask for a joke and get a cool response'),
                 const SizedBox(
                   height: 20,
                 ),
                 Expanded(child: JokeSuggestion()),
-                const SizedBox(
-                  height: 80,
-                )
+                // const Spacer()
               ],
             ),
             Align(
