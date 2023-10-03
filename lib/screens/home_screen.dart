@@ -26,7 +26,6 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        // color: Colors.grey[100],
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Stack(
           children: [
@@ -66,7 +65,6 @@ class HomeScreen extends StatelessWidget {
                   height: 20,
                 ),
                 Expanded(child: JokeSuggestion()),
-                // const Spacer()
               ],
             ),
             Align(
