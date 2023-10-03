@@ -57,6 +57,19 @@ class JokeSuggestion extends StatelessWidget {
                     ),
                   ),
                   onTap: () {},
+                  // onTap: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => ChatScreen(
+                  //         openDrawer: openDrawer,
+                  //         closeDrawer: closeDrawer,
+                  //         isDrawerOpen: isDrawerOpen,
+                  //         selectedChatId: selectedChatId,
+                  //       ),
+                  //     ),
+                  //   );
+                  // },
                 ),
               );
             },

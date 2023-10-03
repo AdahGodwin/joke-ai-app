@@ -74,7 +74,8 @@ class HomeScreen extends StatelessWidget {
                   'Good Morning Godwin!',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
-                const Text('You have several jokes, pick below to continue'),
+                const Text(
+                    'You have several jokes to laugh and ease your stress'),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -91,6 +92,14 @@ class HomeScreen extends StatelessWidget {
                   height: 20,
                 ),
                 Expanded(child: JokeSuggestion()),
+                // Expanded(
+                //   child: JokeSuggestion(
+                //     openDrawer: openDrawer,
+                //     closeDrawer: closeDrawer,
+                //     isDrawerOpen: isDrawerOpen,
+                //     selectedChatId: selectedChatId,
+                //   ),
+                // ),
               ],
             ),
             Align(
