@@ -48,8 +48,7 @@ class JokeSuggestion extends StatelessWidget {
                     style: const TextStyle(color: Colors.white),
                   ),
                   trailing: Transform.scale(
-                    scale:
-                        0.8, 
+                    scale: 0.8,
                     child: IconButton(
                       onPressed: () {},
                       icon: const Icon(Icons.arrow_forward),

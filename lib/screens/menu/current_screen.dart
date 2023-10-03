@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:jokes_ai_app/screens/chat_screen/chat_screen.dart';
+import 'package:jokes_ai_app/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
 class CurrentScreen extends StatelessWidget {
   const CurrentScreen({
@@ -22,12 +25,15 @@ class CurrentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Chat selectedChat =
+        Provider.of<ChatsProvider>(context).getRecentChat(selectedChatId);
+
     return GestureDetector(
       onTap: closeDrawer,
       child: AnimatedContainer(
         transform: Matrix4.translationValues(xOffset, yOffset, 0)
           ..scale(scaleFactor),
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 400),
         curve: Curves.easeIn,
         decoration: BoxDecoration(
           boxShadow: const [
@@ -43,12 +49,19 @@ class CurrentScreen extends StatelessWidget {
           absorbing: isDrawerOpen,
           child: ClipRRect(
               borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-              child: ChatScreen(
-                openDrawer: openDrawer,
-                closeDrawer: closeDrawer,
-                isDrawerOpen: isDrawerOpen,
-                selectedChatId: selectedChatId,
-              )),
+              child: selectedChat.messages!.isEmpty
+                  ? HomeScreen(
+                      openDrawer: openDrawer,
+                      closeDrawer: closeDrawer,
+                      isDrawerOpen: isDrawerOpen,
+                      selectedChatId: selectedChatId,
+                    )
+                  : ChatScreen(
+                      openDrawer: openDrawer,
+                      closeDrawer: closeDrawer,
+                      isDrawerOpen: isDrawerOpen,
+                      selectedChatId: selectedChatId,
+                    )),
         ),
       ),
     );

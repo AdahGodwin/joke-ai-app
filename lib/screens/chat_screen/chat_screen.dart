@@ -31,9 +31,17 @@ class ChatScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: isDrawerOpen ? closeDrawer : openDrawer,
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.grey[100],
+                      ),
+                      padding: const EdgeInsets.all(4.0),
+                      child: IconButton(
+                        icon: Image.asset('assets/icons/menu-icon.png'),
+                        onPressed: isDrawerOpen ? closeDrawer : openDrawer,
+                      ),
                     ),
                     const Text(
                       "Logo",
