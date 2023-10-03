@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hng_authentication/authentication.dart';
 import 'package:hng_authentication/widgets/rounded_bordered_textfield.dart';
 import 'package:hng_authentication/widgets/widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -16,6 +19,8 @@ class LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -139,6 +144,21 @@ class LoginFormState extends State<LoginForm> {
                                           email, password);
                                       if (data != null) {
                                         print('sign up result: >>> $data');
+                                        final SharedPreferences prefs =
+                                            await _prefs;
+                                        prefs.setString(
+                                          "cookie",
+                                          data.cookie,
+                                        );
+                                        prefs.setString(
+                                            "user",
+                                            jsonEncode({
+                                              "id": data.id,
+                                              "name": data.name,
+                                              "email": data.email,
+                                              "cookie": data.cookie,
+                                              "credits": data.credits,
+                                            }));
                                         if (!context.mounted) return;
                                         showSnackbar(context, Colors.blue,
                                             "Sign in Successfull");
