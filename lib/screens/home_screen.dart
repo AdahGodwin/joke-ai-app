@@ -20,9 +20,35 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Jokes AI',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(4),
+              child: const Text(
+                "JOKES",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              width: 25,
+              height: 25,
+              padding: const EdgeInsets.all(4),
+              color: Colors.blue,
+              child: const Center(
+                child: Text(
+                  "AI",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: Container(

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const NavScreen(),
+        home: const RegistrationForm(),
         routes: {
           '/signup': (context) => const RegistrationForm(),
           '/login': (context) => const LoginForm(),
