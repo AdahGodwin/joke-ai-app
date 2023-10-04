@@ -3,6 +3,7 @@ import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:jokes_ai_app/widgets/messages.dart';
 import 'package:jokes_ai_app/widgets/new_message.dart';
 import 'package:jokes_ai_app/widgets/welcome_template.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 import 'package:provider/provider.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Chat chat = Provider.of<ChatsProvider>(context).getChatbyId(selectedJokeId);
-
+    bool isTyping = Provider.of<ChatsProvider>(context).isTyping;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -63,6 +64,24 @@ class ChatScreen extends StatelessWidget {
                           chat: chat,
                         ),
                       ),
+                if (isTyping)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: JumpingDots(
+                          color: Colors.blue,
+                          radius: 10,
+                          numberOfDots: 3,
+                          animationDuration: const Duration(
+                            milliseconds: 200,
+                          ),
+                          verticalOffset: 6,
+                        ),
+                      ),
+                    ],
+                  ),
                 // const Spacer(),
                 Container(
                   height: 60,

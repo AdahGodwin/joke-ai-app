@@ -14,10 +14,14 @@ class JokeListScreen extends StatelessWidget {
     super.key,
     required this.setJokeId,
     required this.selectedJokeId,
+    required this.showHome,
+    required this.showHomePage,
   });
 
   final Function(String id) setJokeId;
   final String selectedJokeId;
+  final Function(bool value) showHome;
+  final bool showHomePage;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,30 @@ class JokeListScreen extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 17,
+                      // radius: 17,
+                      backgroundColor: Colors.grey[100],
+                      child: IconButton(
+                        onPressed: () {
+                          if (showHomePage == false) {
+                            String id = Provider.of<ChatsProvider>(context,
+                                    listen: false)
+                                .getRecentChatId("user1");
+                            setJokeId(id);
+                            showHome(true);
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.home,
+                          size: 25,
+                        ),
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    CircleAvatar(
+                      // radius: 20,
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
                         onPressed: () async {
@@ -118,27 +145,14 @@ class JokeListScreen extends StatelessWidget {
 
                           Navigator.of(context).pushReplacementNamed("/");
                         },
-                        icon: const Icon(Icons.logout),
-                        color: Colors.black54,
+                        icon: const Icon(
+                          Icons.logout,
+                          size: 25,
+                        ),
+                        color: Colors.red,
                       ),
                     ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    // CircleAvatar(
-                    //   radius: 17,
-                    //   backgroundColor: Colors.grey[100],
-                    //   child: IconButton(
-                    //     onPressed: () {
-                    //       Provider.of<OpenAi>(context, listen: false)
-                    //           .sendRequest();
-                    //     },
-                    //     icon: const Icon(
-                    //       Icons.delete_outline,
-                    //     ),
-                    //     color: Colors.black54,
-                    //   ),
-                    // ),
+
                     // CircleAvatar(
                     //   radius: 17,
                     //   backgroundColor: Colors.grey[300],

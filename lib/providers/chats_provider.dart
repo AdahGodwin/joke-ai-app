@@ -19,7 +19,7 @@ class Chat {
 class ChatsProvider with ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   OpenAIRepository openAI = OpenAIRepository();
-
+  bool _isTyping = false;
   final List<Chat> _chatList = [
     Chat(
       userId: "user1",
@@ -34,37 +34,11 @@ class ChatsProvider with ChangeNotifier {
         {"id": "5", "sender": "bot", "message": "??????"},
       ],
     ),
-    Chat(
-      userId: "user1",
-      chatId: "chat2",
-      chatTitle: "Jokes about Fishes and how they act",
-      messages: [
-        {"id": "0", "sender": "user1", "message": "Hey there!"},
-        {"id": "1", "sender": "bot", "message": "Hi, what's up?"},
-        {"id": "2", "sender": "user1", "message": "Hey there!"},
-        {"id": "3", "sender": "bot", "message": "Hi, what's up?"},
-        {"id": "4", "sender": "user1", "message": "Hey there!"},
-        {"id": "5", "sender": "bot", "message": "?????? ?????? ??????"},
-      ],
-    ),
-    Chat(
-      userId: "user1",
-      chatId: "chat3",
-      chatTitle: "Jokes about Snails and how fast they are",
-      messages: [
-        {"id": "0", "sender": "user1", "message": "Hey there!"},
-        {"id": "1", "sender": "bot", "message": "Hi, what's up?"},
-        {"id": "2", "sender": "user1", "message": "Hey there!"},
-        {"id": "3", "sender": "bot", "message": "Hi, what's up?"},
-        {
-          "id": "4",
-          "sender": "user1",
-          "message":
-              "Hey there! Hey there! Hey there! Hey there! Hey there! Hey there! Hey there! Hey there! "
-        },
-      ],
-    ),
   ];
+  bool get isTyping {
+    return _isTyping;
+  }
+
   List<Chat> get allChats {
     return [..._chatList];
   }
@@ -113,9 +87,19 @@ class ChatsProvider with ChangeNotifier {
     return emptyChat[0].chatId;
   }
 
-  void sendMessage(Map<String, dynamic> message, String chatId) {
+  void sendMessage(Map<String, dynamic> message, String chatId, bool typing) {
     Chat chat = _chatList.where((chat) => chat.chatId == chatId).toList()[0];
     chat.messages?.add(message);
+    if (chat.messages!.length == 1) {
+      if (chat.messages != null && chat.messages!.isNotEmpty) {
+        chat.chatTitle = chat.messages![0]['message'];
+
+        if (chat.chatTitle.length > 50) {
+          chat.chatTitle = '${chat.chatTitle.substring(0, 50)}...';
+        }
+      }
+    }
+    _isTyping = typing;
     notifyListeners();
   }
 
@@ -128,6 +112,7 @@ class ChatsProvider with ChangeNotifier {
     final SharedPreferences prefs = await _prefs;
     String cookie = prefs.getString("cookie")!;
     Chat chat = getChatbyId(chatId);
+
     List<String> userMessages = [];
     chat.messages?.map((message) {
       if (message["sender"] == "user1") {
@@ -139,13 +124,16 @@ class ChatsProvider with ChangeNotifier {
           await openAI.getChatCompletions(userMessages, userInput, cookie);
       if (aiResponse.toLowerCase().contains("error")) {
         print("an Error Occured");
+        _isTyping = false;
       } else {
         String id = DateTime.now().millisecondsSinceEpoch.toString();
-        sendMessage({"id": id, "sender": "bot", "message": aiResponse}, chatId);
+        sendMessage(
+            {"id": id, "sender": "bot", "message": aiResponse}, chatId, false);
       }
-      print(" this is a response $aiResponse");
     } catch (error) {
       print("this is an error: $error");
+      _isTyping = false;
     }
+    notifyListeners();
   }
 }
