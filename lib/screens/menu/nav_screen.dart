@@ -33,6 +33,17 @@ class _NavScreenState extends State<NavScreen> {
       selectedJokeId = id;
     });
 
+    Chat joke =
+        Provider.of<ChatsProvider>(context, listen: false).getChatbyId(id);
+
+    if (joke.messages != null && joke.messages!.isNotEmpty) {
+      joke.chatTitle = joke.messages![0]['message'];
+
+      if (joke.chatTitle.length > 40) {
+        joke.chatTitle = '${joke.chatTitle.substring(0, 60)}...';
+      }
+    }
+
     closeDrawer();
   }
 
@@ -58,12 +69,14 @@ class _NavScreenState extends State<NavScreen> {
   }
 
   void closeDrawer() {
-    setState(() {
-      xOffset = 0;
-      yOffset = 0;
-      scaleFactor = 1;
-      isDrawerOpen = false;
-    });
+    if (isDrawerOpen) {
+      setState(() {
+        xOffset = 0;
+        yOffset = 0;
+        scaleFactor = 1;
+        isDrawerOpen = false;
+      });
+    }
   }
 
   @override
@@ -82,7 +95,7 @@ class _NavScreenState extends State<NavScreen> {
             scaleFactor: scaleFactor,
             closeDrawer: closeDrawer,
             openDrawer: openDrawer,
-            selectedChatId: selectedJokeId,
+            selectedJokeId: selectedJokeId,
             showChat: showJoke,
           ),
         ],
