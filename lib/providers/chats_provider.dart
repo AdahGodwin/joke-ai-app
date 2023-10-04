@@ -10,7 +10,7 @@ class Chat {
 
   final String userId;
   final String chatId;
-  final String chatTitle;
+  String chatTitle;
   final List<Map<String, dynamic>>? messages;
 }
 

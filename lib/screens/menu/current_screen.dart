@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jokes_ai_app/providers/chats_provider.dart';
-import 'package:jokes_ai_app/screens/chat_screen/chat_screen.dart';
-import 'package:jokes_ai_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'package:jokes_ai_app/providers/chats_provider.dart';
+import 'package:jokes_ai_app/screens/joke_screen/joke_screen.dart';
+import 'package:jokes_ai_app/screens/home_screen.dart';
 
 class CurrentScreen extends StatelessWidget {
   const CurrentScreen({
@@ -13,10 +14,10 @@ class CurrentScreen extends StatelessWidget {
     super.key,
     required this.closeDrawer,
     required this.openDrawer,
-    required this.selectedChatId,
+    required this.selectedJokeId,
     required this.showChat,
   });
-  final String selectedChatId;
+  final String selectedJokeId;
   final bool isDrawerOpen;
   final VoidCallback openDrawer;
   final VoidCallback closeDrawer;
@@ -28,7 +29,7 @@ class CurrentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Chat selectedChat =
-        Provider.of<ChatsProvider>(context).getRecentChat(selectedChatId);
+        Provider.of<ChatsProvider>(context).getRecentChat(selectedJokeId);
 
     return GestureDetector(
       onTap: closeDrawer,
@@ -56,13 +57,13 @@ class CurrentScreen extends StatelessWidget {
                     openDrawer: openDrawer,
                     closeDrawer: closeDrawer,
                     isDrawerOpen: isDrawerOpen,
-                    selectedChatId: selectedChatId,
+                    selectedJokeId: selectedJokeId,
                   )
                 : ChatScreen(
                     openDrawer: openDrawer,
                     closeDrawer: closeDrawer,
                     isDrawerOpen: isDrawerOpen,
-                    selectedChatId: selectedChatId,
+                    selectedJokeId: selectedJokeId,
                   ),
           ),
         ),

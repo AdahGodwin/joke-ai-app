@@ -9,12 +9,12 @@ class HomeScreen extends StatelessWidget {
     required this.openDrawer,
     required this.closeDrawer,
     required this.isDrawerOpen,
-    required this.selectedChatId,
+    required this.selectedJokeId,
   });
   final VoidCallback openDrawer;
   final VoidCallback closeDrawer;
   final bool isDrawerOpen;
-  final String selectedChatId;
+  final String selectedJokeId;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +93,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: JokeSuggestion(
-                    selectedChatId: selectedChatId,
+                    selectedChatId: selectedJokeId,
                   ),
                 ),
               ],
@@ -112,7 +112,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     color: Colors.white),
                 child: NewMessage(
-                  chatId: selectedChatId,
+                  chatId: selectedJokeId,
                 ),
               ),
             ),

@@ -11,15 +11,15 @@ class ChatScreen extends StatelessWidget {
     required this.openDrawer,
     required this.closeDrawer,
     required this.isDrawerOpen,
-    required this.selectedChatId,
+    required this.selectedJokeId,
   });
   final VoidCallback openDrawer;
   final VoidCallback closeDrawer;
   final bool isDrawerOpen;
-  final String selectedChatId;
+  final String selectedJokeId;
   @override
   Widget build(BuildContext context) {
-    Chat chat = Provider.of<ChatsProvider>(context).getChatbyId(selectedChatId);
+    Chat chat = Provider.of<ChatsProvider>(context).getChatbyId(selectedJokeId);
 
     return Scaffold(
       body: SafeArea(
@@ -43,10 +43,6 @@ class ChatScreen extends StatelessWidget {
                         onPressed: isDrawerOpen ? closeDrawer : openDrawer,
                       ),
                     ),
-                    const Text(
-                      "Logo",
-                      style: TextStyle(fontSize: 16),
-                    ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -63,7 +59,7 @@ class ChatScreen extends StatelessWidget {
                       )
                     : Expanded(
                         child: Messages(
-                          id: selectedChatId,
+                          id: selectedJokeId,
                           chat: chat,
                         ),
                       ),
@@ -79,7 +75,7 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
                   child: NewMessage(
-                    chatId: selectedChatId,
+                    chatId: selectedJokeId,
                   ),
                 ),
               ]),
