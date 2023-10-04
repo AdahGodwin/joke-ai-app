@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:hng_authentication/authentication.dart';
+import 'package:hng_authentication/widgets/widget.dart';
 import 'package:jokes_ai_app/providers/chats_provider.dart';
-import 'package:jokes_ai_app/providers/openai.dart';
+// import 'package:jokes_ai_app/providers/openai.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatListScreen extends StatelessWidget {
   const ChatListScreen(
@@ -11,6 +16,7 @@ class ChatListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Chat> chats = Provider.of<ChatsProvider>(context).allChats;
+    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
     return Scaffold(
       body: SafeArea(
@@ -96,28 +102,39 @@ class ChatListScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 17,
                       backgroundColor: Colors.grey[100],
-                      child: const Icon(
-                        Icons.logout,
+                      child: IconButton(
+                        onPressed: () async {
+                          final prefs = await _prefs;
+                          final user = jsonDecode(prefs.getString("user")!);
+                          await Authentication().logout(user["email"]);
+                          if (!context.mounted) return;
+
+                          showSnackbar(
+                              context, Colors.blue, "Logout Successfull");
+
+                          Navigator.of(context).pushReplacementNamed("/");
+                        },
+                        icon: const Icon(Icons.logout),
                         color: Colors.black54,
                       ),
                     ),
                     const SizedBox(
                       width: 30,
                     ),
-                    CircleAvatar(
-                      radius: 17,
-                      backgroundColor: Colors.grey[100],
-                      child: IconButton(
-                        onPressed: () {
-                          Provider.of<OpenAi>(context, listen: false)
-                              .sendRequest();
-                        },
-                        icon: const Icon(
-                          Icons.delete_outline,
-                        ),
-                        color: Colors.black54,
-                      ),
-                    ),
+                    // CircleAvatar(
+                    //   radius: 17,
+                    //   backgroundColor: Colors.grey[100],
+                    //   child: IconButton(
+                    //     onPressed: () {
+                    //       Provider.of<OpenAi>(context, listen: false)
+                    //           .sendRequest();
+                    //     },
+                    //     icon: const Icon(
+                    //       Icons.delete_outline,
+                    //     ),
+                    //     color: Colors.black54,
+                    //   ),
+                    // ),
                     // CircleAvatar(
                     //   radius: 17,
                     //   backgroundColor: Colors.grey[300],

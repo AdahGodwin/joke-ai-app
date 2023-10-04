@@ -91,15 +91,11 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                Expanded(child: JokeSuggestion()),
-                // Expanded(
-                //   child: JokeSuggestion(
-                //     openDrawer: openDrawer,
-                //     closeDrawer: closeDrawer,
-                //     isDrawerOpen: isDrawerOpen,
-                //     selectedChatId: selectedChatId,
-                //   ),
-                // ),
+                Expanded(
+                  child: JokeSuggestion(
+                    selectedChatId: selectedChatId,
+                  ),
+                ),
               ],
             ),
             Align(

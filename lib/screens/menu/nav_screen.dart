@@ -27,8 +27,8 @@ class _NavScreenState extends State<NavScreen> {
 
   void setChatId(id) {
     setState(() {
-      selectedChatId = id;
       showChat = true;
+      selectedChatId = id;
     });
 
     closeDrawer();

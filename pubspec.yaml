@@ -39,7 +39,8 @@ dependencies:
   http: ^1.1.0
   hng_authentication: ^0.1.4
   google_fonts: ^6.1.0
-  
+  shared_preferences: ^2.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -115,6 +115,18 @@ class RegistrationFormState extends State<RegistrationForm> {
                         });
                       },
                     ),
+                    validator: (val) {
+                      if (val?.isEmpty ?? true) {
+                        return 'Please enter your password';
+                      } else if ((val?.length ?? 0) < 8) {
+                        return 'Password is not up to 8 characters';
+                      } else if (((val?.length ?? 0) >= 8) &&
+                          ((val ?? "") != passwordController.text)) {
+                        return "Password texts don't match";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -125,10 +137,7 @@ class RegistrationFormState extends State<RegistrationForm> {
                     validator: (val) {
                       if (val?.isEmpty ?? true) {
                         return 'Please enter your password';
-                      } else if ((val?.length ?? 0) < 6) {
-                        return 'Password is not up to 6 characters';
-                      } else if (((val?.length ?? 0) >= 6) &&
-                          ((val ?? "") != passwordController.text)) {
+                      } else if (((val ?? "") != passwordController.text)) {
                         return "Password texts don't match";
                       } else {
                         return null;
@@ -166,8 +175,8 @@ class RegistrationFormState extends State<RegistrationForm> {
                                 Colors.blue,
                               ),
                             ),
-                            onPressed: nameController.text.isEmpty |
-                                    emailController.text.isEmpty |
+                            onPressed: nameController.text.isEmpty ||
+                                    emailController.text.isEmpty ||
                                     passwordController.text.isEmpty
                                 ? null
                                 : () async {
@@ -183,7 +192,7 @@ class RegistrationFormState extends State<RegistrationForm> {
                                       final data = await authRepository.signUp(
                                           email, name, password);
                                       if (data != null) {
-                                        print('sign up result: >>> $data');
+                                        // print('sign up result: >>> $data');
                                         if (!context.mounted) return;
                                         showSnackbar(context, Colors.blue,
                                             "Registration Successfull");
@@ -214,7 +223,7 @@ class RegistrationFormState extends State<RegistrationForm> {
                                         Colors.red,
                                         "Registration Unsuccessful",
                                       );
-                                      print(error);
+                                      // print(error);
                                     }
                                   },
                             child: Text(
