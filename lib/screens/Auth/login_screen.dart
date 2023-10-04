@@ -143,7 +143,7 @@ class LoginFormState extends State<LoginForm> {
                                       final data = await authRepository.signIn(
                                           email, password);
                                       if (data != null) {
-                                        print('sign up result: >>> $data');
+                                        // print('sign up result: >>> $data');
                                         final SharedPreferences prefs =
                                             await _prefs;
                                         prefs.setString(
@@ -166,7 +166,7 @@ class LoginFormState extends State<LoginForm> {
                                           isLoading = false;
                                         });
                                         Navigator.of(context)
-                                            .pushReplacementNamed("/home");
+                                            .pushReplacementNamed("/");
                                       } else {
                                         if (!context.mounted) return;
                                         setState(() {
@@ -189,7 +189,7 @@ class LoginFormState extends State<LoginForm> {
                                         Colors.red,
                                         "An Error Occured",
                                       );
-                                      print(error);
+                                      // print(error);
                                     }
                                   },
                             child: Text(

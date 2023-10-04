@@ -51,7 +51,7 @@ class CurrentScreen extends StatelessWidget {
           absorbing: isDrawerOpen,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-            child: selectedChat.messages!.isEmpty & showChat == false
+            child: selectedChat.messages!.isEmpty && showChat == false
                 ? HomeScreen(
                     openDrawer: openDrawer,
                     closeDrawer: closeDrawer,

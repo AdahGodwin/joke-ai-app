@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:jokes_ai_app/models/joke_suggestion_data.dart';
+import 'package:jokes_ai_app/providers/chats_provider.dart';
+import 'package:provider/provider.dart';
 
 class JokeSuggestion extends StatelessWidget {
-  JokeSuggestion({Key? key}) : super(key: key);
-
+  JokeSuggestion({Key? key, required this.selectedChatId}) : super(key: key);
+  final String selectedChatId;
   final List<JokeSuggestionData> suggestedJokes = [
     JokeSuggestionData(
         jokeTitle: 'This is the funniest thing you have heard all year'),
@@ -56,20 +58,14 @@ class JokeSuggestion extends StatelessWidget {
                       icon: const Icon(Icons.arrow_forward),
                     ),
                   ),
-                  onTap: () {},
-                  // onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => ChatScreen(
-                  //         openDrawer: openDrawer,
-                  //         closeDrawer: closeDrawer,
-                  //         isDrawerOpen: isDrawerOpen,
-                  //         selectedChatId: selectedChatId,
-                  //       ),
-                  //     ),
-                  //   );
-                  // },
+                  // onTap: () {},
+                  onTap: () {
+                    Provider.of<ChatsProvider>(context, listen: false)
+                        .sendMessage({
+                      "sender": "user1",
+                      "message": suggestedJokes[index].jokeTitle,
+                    }, selectedChatId);
+                  },
                 ),
               );
             },
