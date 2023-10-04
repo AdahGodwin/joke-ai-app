@@ -96,7 +96,7 @@ class _NavScreenState extends State<NavScreen> {
             closeDrawer: closeDrawer,
             openDrawer: openDrawer,
             selectedJokeId: selectedJokeId,
-            showChat: showJoke,
+            showJoke: showJoke,
           ),
         ],
       ),
