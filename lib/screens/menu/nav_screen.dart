@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jokes_ai_app/providers/chats_provider.dart';
-import 'package:jokes_ai_app/screens/menu/chat_list_screen.dart';
-import 'package:jokes_ai_app/screens/menu/current_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'package:jokes_ai_app/providers/chats_provider.dart';
+import 'package:jokes_ai_app/screens/menu/joke_list_screen.dart';
+import 'package:jokes_ai_app/screens/menu/current_screen.dart';
 
 class NavScreen extends StatefulWidget {
   const NavScreen({super.key});
@@ -16,19 +17,20 @@ class _NavScreenState extends State<NavScreen> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool isDrawerOpen = false;
-  String selectedChatId = "";
-  bool showChat = false;
+  String selectedJokeId = "";
+  bool showJoke = false;
+
   @override
   void initState() {
     super.initState();
-    selectedChatId = Provider.of<ChatsProvider>(context, listen: false)
+    selectedJokeId = Provider.of<ChatsProvider>(context, listen: false)
         .getRecentChatId("user1");
   }
 
-  void setChatId(id) {
+  void setJokeId(id) {
     setState(() {
-      showChat = true;
-      selectedChatId = id;
+      showJoke = true;
+      selectedJokeId = id;
     });
 
     closeDrawer();
@@ -69,9 +71,9 @@ class _NavScreenState extends State<NavScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          ChatListScreen(
-            setChatId: setChatId,
-            selectedChatId: selectedChatId,
+          JokeListScreen(
+            setJokeId: setJokeId,
+            selectedJokeId: selectedJokeId,
           ),
           CurrentScreen(
             isDrawerOpen: isDrawerOpen,
@@ -80,8 +82,8 @@ class _NavScreenState extends State<NavScreen> {
             scaleFactor: scaleFactor,
             closeDrawer: closeDrawer,
             openDrawer: openDrawer,
-            selectedChatId: selectedChatId,
-            showChat: showChat,
+            selectedChatId: selectedJokeId,
+            showChat: showJoke,
           ),
         ],
       ),
