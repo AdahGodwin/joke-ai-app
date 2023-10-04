@@ -159,6 +159,7 @@ class LoginFormState extends State<LoginForm> {
                                               "cookie": data.cookie,
                                               "credits": data.credits,
                                             }));
+                                        print(data.cookie);
                                         if (!context.mounted) return;
                                         showSnackbar(context, Colors.blue,
                                             "Sign in Successfull");

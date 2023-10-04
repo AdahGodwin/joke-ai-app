@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:hngx_openai/repository/openai_repository.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 class Chat {
   Chat({
@@ -15,6 +17,9 @@ class Chat {
 }
 
 class ChatsProvider with ChangeNotifier {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  OpenAIRepository openAI = OpenAIRepository();
+
   final List<Chat> _chatList = [
     Chat(
       userId: "user1",
@@ -60,7 +65,6 @@ class ChatsProvider with ChangeNotifier {
       ],
     ),
   ];
-
   List<Chat> get allChats {
     return [..._chatList];
   }
@@ -84,6 +88,7 @@ class ChatsProvider with ChangeNotifier {
 
   Chat getChatbyId(String id) {
     List<Chat> chat = _chatList.where((chat) => chat.chatId == id).toList();
+
     return chat[0];
   }
 
@@ -117,5 +122,30 @@ class ChatsProvider with ChangeNotifier {
   void clearChats() {
     _chatList.clear();
     notifyListeners();
+  }
+
+  Future<void> sendRequest(userInput, String chatId) async {
+    final SharedPreferences prefs = await _prefs;
+    String cookie = prefs.getString("cookie")!;
+    Chat chat = getChatbyId(chatId);
+    List<String> userMessages = [];
+    chat.messages?.map((message) {
+      if (message["sender"] == "user1") {
+        userMessages.add(message["message"]);
+      }
+    });
+    try {
+      final aiResponse =
+          await openAI.getChatCompletions(userMessages, userInput, cookie);
+      if (aiResponse.toLowerCase().contains("error")) {
+        print("an Error Occured");
+      } else {
+        String id = DateTime.now().millisecondsSinceEpoch.toString();
+        sendMessage({"id": id, "sender": "bot", "message": aiResponse}, chatId);
+      }
+      print(" this is a response $aiResponse");
+    } catch (error) {
+      print("this is an error: $error");
+    }
   }
 }

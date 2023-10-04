@@ -22,7 +22,8 @@ class _NewMessageState extends State<NewMessage> {
         {"sender": "user1", "message": _messageController.text},
         widget.chatId,
       );
-
+      Provider.of<ChatsProvider>(context, listen: false)
+          .sendRequest(_messageController.text, widget.chatId);
       _messageController.clear();
     }
   }
