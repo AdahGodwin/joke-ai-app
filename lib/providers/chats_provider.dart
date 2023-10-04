@@ -72,7 +72,7 @@ class ChatsProvider with ChangeNotifier {
         Chat(
           userId: userId,
           chatId: chatId,
-          chatTitle: "New Chat",
+          chatTitle: "New Joke",
           messages: [],
         ));
     if (notify == true) {

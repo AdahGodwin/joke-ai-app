@@ -1,21 +1,27 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:hng_authentication/authentication.dart';
 import 'package:hng_authentication/widgets/widget.dart';
-import 'package:jokes_ai_app/providers/chats_provider.dart';
-// import 'package:jokes_ai_app/providers/openai.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ChatListScreen extends StatelessWidget {
-  const ChatListScreen(
-      {super.key, required this.setChatId, required this.selectedChatId});
-  final Function(String id) setChatId;
-  final String selectedChatId;
+import 'package:jokes_ai_app/providers/chats_provider.dart';
+// import 'package:jokes_ai_app/providers/openai.dart';
+
+class JokeListScreen extends StatelessWidget {
+  const JokeListScreen({
+    super.key,
+    required this.setJokeId,
+    required this.selectedJokeId,
+  });
+
+  final Function(String id) setJokeId;
+  final String selectedJokeId;
+
   @override
   Widget build(BuildContext context) {
-    List<Chat> chats = Provider.of<ChatsProvider>(context).allChats;
+    List<Chat> jokes = Provider.of<ChatsProvider>(context).allChats;
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
     return Scaffold(
@@ -35,19 +41,17 @@ class ChatListScreen extends StatelessWidget {
                   height: 30,
                 ),
                 SizedBox(
-                  // height: 45,
                   width: double.infinity,
-
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      String chatId =
+                      String jokeId =
                           Provider.of<ChatsProvider>(context, listen: false)
                               .createChat("user1");
-                      setChatId(chatId);
+                      setJokeId(jokeId);
                     },
                     icon: const Icon(Icons.add),
                     label: const Text(
-                      "Start new Chat",
+                      "Start new Joke",
                     ),
                     style: OutlinedButton.styleFrom(
                       alignment: const AlignmentDirectional(-1, 0),
@@ -64,7 +68,7 @@ class ChatListScreen extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.7,
                   child: ListView.builder(
-                    itemCount: chats.length,
+                    itemCount: jokes.length,
                     itemBuilder: (context, index) => ListTile(
                       titleAlignment: ListTileTitleAlignment.top,
                       contentPadding: const EdgeInsets.symmetric(
@@ -74,21 +78,21 @@ class ChatListScreen extends StatelessWidget {
                         backgroundColor: Colors.grey[100],
                         child: Icon(
                           Icons.chat_bubble_outline_rounded,
-                          color: chats[index].chatId == selectedChatId
+                          color: jokes[index].chatId == selectedJokeId
                               ? Colors.blue
                               : Colors.grey[350],
                         ),
                       ),
                       title: Text(
-                        chats[index].chatTitle,
+                        jokes[index].chatTitle,
                         style: TextStyle(
-                          color: chats[index].chatId == selectedChatId
+                          color: jokes[index].chatId == selectedJokeId
                               ? Colors.blue
                               : Colors.black,
                         ),
                       ),
                       onTap: () {
-                        setChatId(chats[index].chatId);
+                        setJokeId(jokes[index].chatId);
                       },
                     ),
                   ),
