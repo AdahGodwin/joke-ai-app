@@ -11,9 +11,9 @@ class ScrollingCards extends StatelessWidget {
         jokeTitle:
             'Why did the chicken cross the road asks the curious passerby'),
     ScrollingCardData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
-    ScrollingCardData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
+        jokeTitle:
+            'Two girls and one guy where caught in bed. Do you know why?'),
+    ScrollingCardData(jokeTitle: 'The dog said to the lion, you talk too much'),
   ];
 
   ScrollingCards({super.key});
@@ -30,7 +30,6 @@ class ScrollingCards extends StatelessWidget {
           return SizedBox(
             width: MediaQuery.of(context).size.width - 100,
             child: Card(
-              // color: Colors.blueAccent,
               color: Color((random.nextDouble() * 0xFFFFFF).toInt())
                   .withOpacity(1.0),
               margin:
@@ -49,7 +48,6 @@ class ScrollingCards extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: Container(
                       padding: const EdgeInsets.all(10),
-                      // color: Colors.black54,
                       child: Text(
                         cardTitles[index].jokeTitle,
                         style: const TextStyle(

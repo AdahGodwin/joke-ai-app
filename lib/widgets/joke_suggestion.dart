@@ -10,19 +10,21 @@ class JokeSuggestion extends StatelessWidget {
     JokeSuggestionData(
         jokeTitle: 'This is the funniest thing you have heard all year'),
     JokeSuggestionData(
-        jokeTitle: 'Do you know you can go from your house to Greece in 2hrs'),
+        jokeTitle:
+            'She didn\'t believe me when i told her i was the first man to play ps5'),
     JokeSuggestionData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
-    JokeSuggestionData(
-        jokeTitle: 'Do you know you can go from your house to Greece in 2hrs'),
-    JokeSuggestionData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
+        jokeTitle: 'Dad! Dad!! Come quick, no time to tell tales'),
     JokeSuggestionData(
         jokeTitle: 'Do you know you can go from your house to Greece in 2hrs'),
     JokeSuggestionData(
         jokeTitle: 'This is the funniest thing you have heard all year'),
     JokeSuggestionData(
-        jokeTitle: 'Do you know you can go from your house to Greece in 2hrs'),
+        jokeTitle:
+            'Just keep it going, she said. Make sure to get to the end of it.'),
+    JokeSuggestionData(
+        jokeTitle: 'This is the funniest thing you have heard all year'),
+    JokeSuggestionData(
+        jokeTitle: 'Let me show you how i turned water to juice'),
   ];
 
   @override
@@ -55,6 +57,19 @@ class JokeSuggestion extends StatelessWidget {
                     ),
                   ),
                   onTap: () {},
+                  // onTap: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => ChatScreen(
+                  //         openDrawer: openDrawer,
+                  //         closeDrawer: closeDrawer,
+                  //         isDrawerOpen: isDrawerOpen,
+                  //         selectedChatId: selectedChatId,
+                  //       ),
+                  //     ),
+                  //   );
+                  // },
                 ),
               );
             },
