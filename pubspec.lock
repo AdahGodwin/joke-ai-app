@@ -216,6 +216,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.4"
+  hngx_openai:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "24b8c5a6e55836a7a905c6a0ef6ec710f0c74aef"
+      url: "https://github.com/hngx-org/openai-package.git"
+    source: git
+    version: "1.0.0"
   http:
     dependency: "direct main"
     description:
@@ -240,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.1"
+  jumping_dot:
+    dependency: "direct main"
+    description:
+      name: jumping_dot
+      sha256: a2f755140da73d018bf5198acd83cdd2898a393e5ea45ee94250b9ba44566d1c
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   lints:
     dependency: transitive
     description:

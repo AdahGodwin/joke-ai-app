@@ -10,12 +10,13 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      reverse: true,
-      itemCount: chat.messages?.length ?? 0,
-      itemBuilder: (context, index) => MessageBubble(
-        isMe: chat.messages?.reversed.toList()[index]["sender"] == "user1",
-        message: chat.messages?.reversed.toList()[index],
-      ),
-    );
+        reverse: true,
+        itemCount: chat.messages?.length ?? 0,
+        itemBuilder: (context, index) {
+          return MessageBubble(
+            isMe: chat.messages?.reversed.toList()[index]["sender"] == "user1",
+            message: chat.messages?.reversed.toList()[index],
+          );
+        });
   }
 }

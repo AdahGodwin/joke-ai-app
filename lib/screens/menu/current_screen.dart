@@ -16,6 +16,8 @@ class CurrentScreen extends StatelessWidget {
     required this.openDrawer,
     required this.selectedJokeId,
     required this.showJoke,
+    required this.showHomePage,
+    required this.showHome,
   });
   final String selectedJokeId;
   final bool isDrawerOpen;
@@ -25,6 +27,8 @@ class CurrentScreen extends StatelessWidget {
   final double yOffset;
   final double scaleFactor;
   final bool showJoke;
+  final bool showHomePage;
+  final Function(bool value) showHome;
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +56,14 @@ class CurrentScreen extends StatelessWidget {
           absorbing: isDrawerOpen,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-            child: selectedJoke.messages!.isEmpty && showJoke == false
+            child: selectedJoke.messages!.isEmpty && showJoke == false ||
+                    showHomePage == true
                 ? HomeScreen(
                     openDrawer: openDrawer,
                     closeDrawer: closeDrawer,
                     isDrawerOpen: isDrawerOpen,
                     selectedJokeId: selectedJokeId,
+                    showHome: showHome,
                   )
                 : ChatScreen(
                     openDrawer: openDrawer,
