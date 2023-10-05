@@ -18,15 +18,28 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
 
-  void _sendMessage(String messageId) {
+  void _sendMessage(String messageId) async {
+    FocusNode().unfocus();
     if (_messageController.text.trim().isNotEmpty) {
       Provider.of<ChatsProvider>(context, listen: false).sendMessage(
           {"sender": "user1", "message": _messageController.text},
           widget.chatId,
           true);
-      Provider.of<ChatsProvider>(context, listen: false)
-          .sendRequest(_messageController.text, widget.chatId);
       _messageController.clear();
+      String error = await Provider.of<ChatsProvider>(context, listen: false)
+          .sendRequest(_messageController.text, widget.chatId);
+      if (error.isNotEmpty) {
+        if (!context.mounted) return;
+
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Error"),
+                content: Text(error),
+              );
+            });
+      }
     }
   }
 

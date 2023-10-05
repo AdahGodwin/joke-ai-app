@@ -101,7 +101,7 @@ class ChatsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> sendRequest(userInput, String chatId) async {
+  Future<dynamic> sendRequest(userInput, String chatId) async {
     final SharedPreferences prefs = await _prefs;
     String cookie = prefs.getString("cookie")!;
 
@@ -109,7 +109,9 @@ class ChatsProvider with ChangeNotifier {
       final aiResponse = await openAI.getChat(userInput, cookie);
       if (aiResponse.toLowerCase().contains("error")) {
         _isTyping = false;
+        return filterText(aiResponse);
       } else {
+        _isTyping = false;
         String response = filterText(aiResponse);
         String id = DateTime.now().millisecondsSinceEpoch.toString();
         sendMessage(
@@ -117,6 +119,7 @@ class ChatsProvider with ChangeNotifier {
       }
     } catch (error) {
       _isTyping = false;
+      return "An error occured";
     }
     notifyListeners();
   }
