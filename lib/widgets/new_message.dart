@@ -6,8 +6,10 @@ class NewMessage extends StatefulWidget {
   const NewMessage({
     super.key,
     required this.chatId,
+    this.showHome,
   });
   final String chatId;
+  final Function(bool value)? showHome;
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -19,10 +21,11 @@ class _NewMessageState extends State<NewMessage> {
   void _sendMessage(String messageId) {
     if (_messageController.text.trim().isNotEmpty) {
       Provider.of<ChatsProvider>(context, listen: false).sendMessage(
-        {"sender": "user1", "message": _messageController.text},
-        widget.chatId,
-      );
-
+          {"sender": "user1", "message": _messageController.text},
+          widget.chatId,
+          true);
+      Provider.of<ChatsProvider>(context, listen: false)
+          .sendRequest(_messageController.text, widget.chatId);
       _messageController.clear();
     }
   }
@@ -33,6 +36,8 @@ class _NewMessageState extends State<NewMessage> {
       children: [
         Expanded(
           child: TextField(
+            minLines: 1,
+            maxLines: 3,
             controller: _messageController,
             decoration: const InputDecoration.collapsed(
               hintText: "Ask me Anything here",
@@ -51,6 +56,9 @@ class _NewMessageState extends State<NewMessage> {
                 String messageId =
                     DateTime.now().millisecondsSinceEpoch.toString();
                 _sendMessage(messageId);
+                if (widget.showHome != null) {
+                  widget.showHome!(false);
+                }
               },
               icon: const Icon(Icons.send),
             ),

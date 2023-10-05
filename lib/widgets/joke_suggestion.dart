@@ -6,8 +6,11 @@ import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:provider/provider.dart';
 
 class JokeSuggestion extends StatelessWidget {
-  JokeSuggestion({Key? key, required this.selectedChatId}) : super(key: key);
+  JokeSuggestion(
+      {Key? key, required this.selectedChatId, required this.showHome})
+      : super(key: key);
   final String selectedChatId;
+  final Function(bool value) showHome;
   final List<JokeSuggestionData> suggestedJokes = [
     JokeSuggestionData(
         jokeTitle: 'This is the funniest thing you have heard all year'),
@@ -64,7 +67,11 @@ class JokeSuggestion extends StatelessWidget {
                         .sendMessage({
                       "sender": "user1",
                       "message": suggestedJokes[index].jokeTitle,
-                    }, selectedChatId);
+                    }, selectedChatId, true);
+                    Provider.of<ChatsProvider>(context, listen: false)
+                        .sendRequest(
+                            suggestedJokes[index].jokeTitle, selectedChatId);
+                    showHome(false);
                   },
                 ),
               );

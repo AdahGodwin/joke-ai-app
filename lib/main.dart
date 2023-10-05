@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:jokes_ai_app/providers/chats_provider.dart';
-import 'package:jokes_ai_app/providers/openai.dart';
 import 'package:jokes_ai_app/screens/Auth/login_screen.dart';
 import 'package:jokes_ai_app/screens/Auth/signup_screen.dart';
 import 'package:jokes_ai_app/screens/menu/nav_screen.dart';
@@ -23,9 +22,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ChatsProvider>(
           create: (context) => ChatsProvider(),
-        ),
-        ChangeNotifierProvider<OpenAi>(
-          create: (context) => OpenAi(),
         ),
       ],
       child: MaterialApp(
@@ -46,7 +42,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.data?.getString("user") != null) {
                 return const NavScreen();
               }
-              return const NavScreen();
+              return const RegistrationForm();
             }),
         routes: {
           '/signup': (context) => const RegistrationForm(),

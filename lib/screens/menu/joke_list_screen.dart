@@ -14,15 +14,18 @@ class JokeListScreen extends StatelessWidget {
     super.key,
     required this.setJokeId,
     required this.selectedJokeId,
+    required this.showHome,
+    required this.showHomePage,
   });
 
   final Function(String id) setJokeId;
   final String selectedJokeId;
+  final Function(bool value) showHome;
+  final bool showHomePage;
 
   @override
   Widget build(BuildContext context) {
     List<Chat> jokes = Provider.of<ChatsProvider>(context).allChats;
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
     return Scaffold(
       body: SafeArea(
@@ -104,49 +107,50 @@ class JokeListScreen extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 17,
+                      // radius: 17,
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
-                        onPressed: () async {
-                          final prefs = await _prefs;
-                          final user = jsonDecode(prefs.getString("user")!);
-                          await Authentication().logout(user["email"]);
-                          if (!context.mounted) return;
-
-                          showSnackbar(
-                              context, Colors.blue, "Logout Successfull");
-
-                          Navigator.of(context).pushReplacementNamed("/");
+                        onPressed: () {
+                          if (showHomePage == false) {
+                            String id = Provider.of<ChatsProvider>(context,
+                                    listen: false)
+                                .getRecentChatId("user1");
+                            setJokeId(id);
+                            showHome(true);
+                          }
                         },
-                        icon: const Icon(Icons.logout),
-                        color: Colors.black54,
+                        icon: const Icon(
+                          Icons.home,
+                          size: 25,
+                        ),
+                        color: Colors.blue,
                       ),
                     ),
                     const SizedBox(
                       width: 30,
                     ),
-                    // CircleAvatar(
-                    //   radius: 17,
-                    //   backgroundColor: Colors.grey[100],
-                    //   child: IconButton(
-                    //     onPressed: () {
-                    //       Provider.of<OpenAi>(context, listen: false)
-                    //           .sendRequest();
-                    //     },
-                    //     icon: const Icon(
-                    //       Icons.delete_outline,
-                    //     ),
-                    //     color: Colors.black54,
-                    //   ),
-                    // ),
-                    // CircleAvatar(
-                    //   radius: 17,
-                    //   backgroundColor: Colors.grey[300],
-                    //   child: const Icon(
-                    //     Icons.chat_bubble_outline_rounded,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
+                    CircleAvatar(
+                      // radius: 20,
+                      backgroundColor: Colors.grey[100],
+                      child: IconButton(
+                        onPressed: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          final user = jsonDecode(prefs.getString("user")!);
+                          await Authentication().logout(user["email"]);
+                          if (!context.mounted) return;
+
+                          showSnackbar(
+                              context, Colors.blue, "Logout Successful");
+
+                          Navigator.of(context).pushReplacementNamed("/");
+                        },
+                        icon: const Icon(
+                          Icons.logout,
+                          size: 25,
+                        ),
+                        color: Colors.red,
+                      ),
+                    ),
                   ],
                 ),
               ],

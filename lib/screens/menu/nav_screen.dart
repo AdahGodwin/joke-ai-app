@@ -19,6 +19,7 @@ class _NavScreenState extends State<NavScreen> {
   bool isDrawerOpen = false;
   String selectedJokeId = "";
   bool showJoke = false;
+  bool showHomePage = true;
 
   @override
   void initState() {
@@ -27,22 +28,19 @@ class _NavScreenState extends State<NavScreen> {
         .getRecentChatId("user1");
   }
 
+  void showHome(bool value) {
+    setState(() {
+      showHomePage = value;
+    });
+    closeDrawer();
+  }
+
   void setJokeId(id) {
     setState(() {
+      showHomePage = false;
       showJoke = true;
       selectedJokeId = id;
     });
-
-    Chat joke =
-        Provider.of<ChatsProvider>(context, listen: false).getChatbyId(id);
-
-    if (joke.messages != null && joke.messages!.isNotEmpty) {
-      joke.chatTitle = joke.messages![0]['message'];
-
-      if (joke.chatTitle.length > 40) {
-        joke.chatTitle = '${joke.chatTitle.substring(0, 60)}...';
-      }
-    }
 
     closeDrawer();
   }
@@ -87,6 +85,8 @@ class _NavScreenState extends State<NavScreen> {
           JokeListScreen(
             setJokeId: setJokeId,
             selectedJokeId: selectedJokeId,
+            showHome: showHome,
+            showHomePage: showHomePage,
           ),
           CurrentScreen(
             isDrawerOpen: isDrawerOpen,
@@ -97,6 +97,8 @@ class _NavScreenState extends State<NavScreen> {
             openDrawer: openDrawer,
             selectedJokeId: selectedJokeId,
             showJoke: showJoke,
+            showHome: showHome,
+            showHomePage: showHomePage,
           ),
         ],
       ),
