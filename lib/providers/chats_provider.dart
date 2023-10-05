@@ -109,8 +109,9 @@ class ChatsProvider with ChangeNotifier {
       final aiResponse = await openAI.getChat(userInput, cookie);
       if (aiResponse.toLowerCase().contains("error")) {
         _isTyping = false;
-        return aiResponse;
+        return filterText(aiResponse);
       } else {
+        _isTyping = false;
         String response = filterText(aiResponse);
         String id = DateTime.now().millisecondsSinceEpoch.toString();
         sendMessage(
@@ -118,8 +119,7 @@ class ChatsProvider with ChangeNotifier {
       }
     } catch (error) {
       _isTyping = false;
-
-      return "An Error Occured";
+      return "An error occured";
     }
     notifyListeners();
   }
