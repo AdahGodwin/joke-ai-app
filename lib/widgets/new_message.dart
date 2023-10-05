@@ -36,6 +36,8 @@ class _NewMessageState extends State<NewMessage> {
       children: [
         Expanded(
           child: TextField(
+            minLines: 1,
+            maxLines: 3,
             controller: _messageController,
             decoration: const InputDecoration.collapsed(
               hintText: "Ask me Anything here",

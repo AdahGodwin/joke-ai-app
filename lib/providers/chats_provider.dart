@@ -20,21 +20,7 @@ class ChatsProvider with ChangeNotifier {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   OpenAIRepository openAI = OpenAIRepository();
   bool _isTyping = false;
-  final List<Chat> _chatList = [
-    Chat(
-      userId: "user1",
-      chatId: "chat1",
-      chatTitle: "The Miracle of ShakesPeare",
-      messages: [
-        {"id": "0", "sender": "user1", "message": "Hey there!"},
-        {"id": "1", "sender": "bot", "message": "Hi, what's up?"},
-        {"id": "2", "sender": "user1", "message": "Hey there!"},
-        {"id": "3", "sender": "bot", "message": "Hi, what's up?"},
-        {"id": "4", "sender": "user1", "message": "Hey there!"},
-        {"id": "5", "sender": "bot", "message": "??????"},
-      ],
-    ),
-  ];
+  final List<Chat> _chatList = [];
   bool get isTyping {
     return _isTyping;
   }
@@ -103,32 +89,32 @@ class ChatsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearChats() {
-    _chatList.clear();
-    notifyListeners();
+  // void clearChats() {
+  //   _chatList.clear();
+  //   notifyListeners();
+  // }
+  String filterText(String response) {
+    if (response.startsWith("M")) {
+      return response.substring(8).trim();
+    } else {
+      return response.substring(6);
+    }
   }
 
   Future<void> sendRequest(userInput, String chatId) async {
     final SharedPreferences prefs = await _prefs;
     String cookie = prefs.getString("cookie")!;
-    Chat chat = getChatbyId(chatId);
 
-    List<String> userMessages = [];
-    chat.messages?.map((message) {
-      if (message["sender"] == "user1") {
-        userMessages.add(message["message"]);
-      }
-    });
     try {
-      final aiResponse =
-          await openAI.getChatCompletions(userMessages, userInput, cookie);
+      final aiResponse = await openAI.getChat(userInput, cookie);
       if (aiResponse.toLowerCase().contains("error")) {
         print("an Error Occured");
         _isTyping = false;
       } else {
+        String response = filterText(aiResponse);
         String id = DateTime.now().millisecondsSinceEpoch.toString();
         sendMessage(
-            {"id": id, "sender": "bot", "message": aiResponse}, chatId, false);
+            {"id": id, "sender": "bot", "message": response}, chatId, false);
       }
     } catch (error) {
       print("this is an error: $error");

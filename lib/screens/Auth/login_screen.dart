@@ -143,7 +143,6 @@ class LoginFormState extends State<LoginForm> {
                                       final data = await authRepository.signIn(
                                           email, password);
                                       if (data != null) {
-                                        // print('sign up result: >>> $data');
                                         final SharedPreferences prefs =
                                             await _prefs;
                                         prefs.setString(
@@ -159,7 +158,7 @@ class LoginFormState extends State<LoginForm> {
                                               "cookie": data.cookie,
                                               "credits": data.credits,
                                             }));
-                                        print(data.cookie);
+
                                         if (!context.mounted) return;
                                         showSnackbar(context, Colors.blue,
                                             "Sign in Successfull");

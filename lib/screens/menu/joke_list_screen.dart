@@ -26,7 +26,6 @@ class JokeListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Chat> jokes = Provider.of<ChatsProvider>(context).allChats;
-    final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
     return Scaffold(
       body: SafeArea(
@@ -135,13 +134,13 @@ class JokeListScreen extends StatelessWidget {
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
                         onPressed: () async {
-                          final prefs = await _prefs;
+                          final prefs = await SharedPreferences.getInstance();
                           final user = jsonDecode(prefs.getString("user")!);
                           await Authentication().logout(user["email"]);
                           if (!context.mounted) return;
 
                           showSnackbar(
-                              context, Colors.blue, "Logout Successfull");
+                              context, Colors.blue, "Logout Successful");
 
                           Navigator.of(context).pushReplacementNamed("/");
                         },
@@ -152,15 +151,6 @@ class JokeListScreen extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
-
-                    // CircleAvatar(
-                    //   radius: 17,
-                    //   backgroundColor: Colors.grey[300],
-                    //   child: const Icon(
-                    //     Icons.chat_bubble_outline_rounded,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
                   ],
                 ),
               ],
