@@ -6,14 +6,11 @@ import 'package:jokes_ai_app/models/scrolling_card_data.dart';
 class ScrollingCards extends StatelessWidget {
   final List<ScrollingCardData> cardTitles = [
     ScrollingCardData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
+        jokeTitle: 'Tell me the funniest thing you have heard all year'),
+    ScrollingCardData(jokeTitle: 'Why did the chicken cross the road'),
     ScrollingCardData(
-        jokeTitle:
-            'Why did the chicken cross the road asks the curious passerby'),
-    ScrollingCardData(
-        jokeTitle:
-            'Two girls and one guy where caught in bed. Do you know why?'),
-    ScrollingCardData(jokeTitle: 'The dog said to the lion, you talk too much'),
+        jokeTitle: 'Do you know why politicians can\'t make heaven?'),
+    ScrollingCardData(jokeTitle: 'Give a funny story on the animal kingdom'),
   ];
 
   ScrollingCards({super.key});

@@ -12,24 +12,21 @@ class JokeSuggestion extends StatelessWidget {
   final String selectedChatId;
   final Function(bool value) showHome;
   final List<JokeSuggestionData> suggestedJokes = [
+    JokeSuggestionData(jokeTitle: 'Tell the funniest dad joke you know'),
+    JokeSuggestionData(jokeTitle: 'Give a random joke of old school mates'),
+    JokeSuggestionData(
+        jokeTitle: 'Can you give me a funny joke about countries and citizens'),
+    JokeSuggestionData(jokeTitle: 'How much did the Romans enjoy jokes'),
     JokeSuggestionData(
         jokeTitle: 'This is the funniest thing you have heard all year'),
     JokeSuggestionData(
         jokeTitle:
-            'She didn\'t believe me when i told her i was the first man to play ps5'),
-    JokeSuggestionData(
-        jokeTitle: 'Dad! Dad!! Come quick, no time to tell tales'),
-    JokeSuggestionData(
-        jokeTitle: 'Do you know you can go from your house to Greece in 2hrs'),
-    JokeSuggestionData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
+            'Tell a joke to motivate a person to shake off the challenges and move on'),
     JokeSuggestionData(
         jokeTitle:
-            'Just keep it going, she said. Make sure to get to the end of it.'),
+            'Magicians and Comedians, who makes the world a better place'),
     JokeSuggestionData(
-        jokeTitle: 'This is the funniest thing you have heard all year'),
-    JokeSuggestionData(
-        jokeTitle: 'Let me show you how i turned water to juice'),
+        jokeTitle: 'A religious joke will be really interesting at the point'),
   ];
 
   @override
