@@ -63,7 +63,8 @@ class CurrentScreen extends StatelessWidget {
                     closeDrawer: closeDrawer,
                     isDrawerOpen: isDrawerOpen,
                     selectedJokeId: selectedJokeId,
-                    showHome: showHome)
+                    showHome: showHome,
+                  )
                 : ChatScreen(
                     openDrawer: openDrawer,
                     closeDrawer: closeDrawer,
