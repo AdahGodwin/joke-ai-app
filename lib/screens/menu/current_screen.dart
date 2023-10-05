@@ -6,18 +6,19 @@ import 'package:jokes_ai_app/screens/joke_screen/joke_screen.dart';
 import 'package:jokes_ai_app/screens/home_screen.dart';
 
 class CurrentScreen extends StatelessWidget {
-  const CurrentScreen(
-      {required this.isDrawerOpen,
-      required this.xOffset,
-      required this.yOffset,
-      required this.scaleFactor,
-      super.key,
-      required this.closeDrawer,
-      required this.openDrawer,
-      required this.selectedJokeId,
-      required this.showChat,
-      required this.showHomePage,
-      required this.showHome});
+  const CurrentScreen({
+    required this.isDrawerOpen,
+    required this.xOffset,
+    required this.yOffset,
+    required this.scaleFactor,
+    super.key,
+    required this.closeDrawer,
+    required this.openDrawer,
+    required this.selectedJokeId,
+    required this.showJoke,
+    required this.showHomePage,
+    required this.showHome,
+  });
   final String selectedJokeId;
   final bool isDrawerOpen;
   final VoidCallback openDrawer;
@@ -25,13 +26,13 @@ class CurrentScreen extends StatelessWidget {
   final double xOffset;
   final double yOffset;
   final double scaleFactor;
-  final bool showChat;
+  final bool showJoke;
   final bool showHomePage;
   final Function(bool value) showHome;
 
   @override
   Widget build(BuildContext context) {
-    Chat selectedChat =
+    Chat selectedJoke =
         Provider.of<ChatsProvider>(context).getRecentChat(selectedJokeId);
 
     return GestureDetector(
@@ -55,7 +56,7 @@ class CurrentScreen extends StatelessWidget {
           absorbing: isDrawerOpen,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-            child: selectedChat.messages!.isEmpty && showChat == false ||
+            child: selectedJoke.messages!.isEmpty && showJoke == false ||
                     showHomePage == true
                 ? HomeScreen(
                     openDrawer: openDrawer,
