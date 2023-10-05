@@ -6,6 +6,7 @@ class Messages extends StatelessWidget {
   const Messages({required this.id, super.key, required this.chat});
   final String id;
   final Chat chat;
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
