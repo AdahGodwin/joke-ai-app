@@ -59,16 +59,29 @@ class JokeSuggestion extends StatelessWidget {
                     ),
                   ),
                   // onTap: () {},
-                  onTap: () {
+                  onTap: () async {
                     Provider.of<ChatsProvider>(context, listen: false)
                         .sendMessage({
                       "sender": "user1",
                       "message": suggestedJokes[index].jokeTitle,
                     }, selectedChatId, true);
-                    Provider.of<ChatsProvider>(context, listen: false)
+                    String error = await Provider.of<ChatsProvider>(context,
+                            listen: false)
                         .sendRequest(
                             suggestedJokes[index].jokeTitle, selectedChatId);
                     showHome(false);
+                    if (error.isNotEmpty) {
+                      if (!context.mounted) return;
+
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Error"),
+                              content: Text(error),
+                            );
+                          });
+                    }
                   },
                 ),
               );

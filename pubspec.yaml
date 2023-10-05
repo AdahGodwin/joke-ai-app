@@ -45,6 +45,8 @@ dependencies:
       url: https://github.com/hngx-org/openai-package.git
       ref: main
   jumping_dot: ^0.0.6
+  in_app_payment: ^0.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
