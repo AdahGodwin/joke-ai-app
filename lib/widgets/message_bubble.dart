@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({this.message, required this.isMe, super.key});
+  const MessageBubble({
+    this.message,
+    required this.isMe,
+    required this.backgroundColor,
+    super.key,
+  });
+
   final Map<String, dynamic>? message;
   final bool isMe;
+  final Color backgroundColor;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -12,7 +20,8 @@ class MessageBubble extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: isMe ? Colors.blue : Colors.white,
+            // color: isMe ? Colors.blue : Colors.green,
+            color: backgroundColor,
             borderRadius: BorderRadius.only(
               topRight:
                   isMe ? const Radius.circular(0) : const Radius.circular(15),
