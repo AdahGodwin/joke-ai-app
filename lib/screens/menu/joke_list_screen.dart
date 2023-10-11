@@ -31,7 +31,7 @@ class JokeListScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.only(top: 28.0, left: 10, bottom: 20),
+            padding: const EdgeInsets.only(top: 20.0, left: 10, bottom: 20),
             width: 280,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ class JokeListScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -66,16 +66,16 @@ class JokeListScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.6,
                   child: ListView.builder(
                     itemCount: jokes.length,
                     itemBuilder: (context, index) => ListTile(
                       titleAlignment: ListTileTitleAlignment.top,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 10),
+                          horizontal: 0, vertical: 5),
                       leading: CircleAvatar(
                         radius: 17,
                         backgroundColor: Colors.grey[100],
@@ -107,7 +107,6 @@ class JokeListScreen extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      // radius: 17,
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
                         onPressed: () {
@@ -130,7 +129,6 @@ class JokeListScreen extends StatelessWidget {
                       width: 30,
                     ),
                     CircleAvatar(
-                      // radius: 20,
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
                         onPressed: () async {

@@ -74,7 +74,7 @@ class LoginFormState extends State<LoginForm> {
                     height: 70,
                   ),
                   Text(
-                    "Create Account",
+                    "Login Account",
                     style: GoogleFonts.lato(
                       textStyle: const TextStyle(
                         letterSpacing: .5,
@@ -189,7 +189,6 @@ class LoginFormState extends State<LoginForm> {
                                         Colors.red,
                                         "An Error Occured",
                                       );
-                                      // print(error);
                                     }
                                   },
                             child: Text(

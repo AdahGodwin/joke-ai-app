@@ -47,7 +47,7 @@ class CurrentScreen extends StatelessWidget {
             BoxShadow(
               color: Color.fromARGB(239, 233, 232, 232),
               blurRadius: 10,
-              offset: Offset(-5, 0), // Shadow position
+              offset: Offset(-5, 0),
             ),
           ],
           borderRadius: BorderRadius.circular(25),

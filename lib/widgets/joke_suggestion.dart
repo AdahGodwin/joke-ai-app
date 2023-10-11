@@ -32,63 +32,56 @@ class JokeSuggestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Random random = Random();
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: suggestedJokes.length,
-            itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color((random.nextDouble() * 0xFFFFFF).toInt())
-                      .withOpacity(1.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                margin: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(
-                    suggestedJokes[index].jokeTitle,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  trailing: Transform.scale(
-                    scale: 0.8,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.arrow_forward),
-                    ),
-                  ),
-                  // onTap: () {},
-                  onTap: () async {
-                    Provider.of<ChatsProvider>(context, listen: false)
-                        .sendMessage({
-                      "sender": "user1",
-                      "message": suggestedJokes[index].jokeTitle,
-                    }, selectedChatId, true);
-                    String error = await Provider.of<ChatsProvider>(context,
-                            listen: false)
-                        .sendRequest(
-                            suggestedJokes[index].jokeTitle, selectedChatId);
-                    showHome(false);
-                    if (error.isNotEmpty) {
-                      if (!context.mounted) return;
+    return ListView.builder(
+      itemCount: suggestedJokes.length,
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color((random.nextDouble() * 0xFFFFFF).toInt())
+                .withOpacity(1.0),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          margin: const EdgeInsets.all(8.0),
+          child: ListTile(
+            title: Text(
+              suggestedJokes[index].jokeTitle,
+              style: const TextStyle(color: Colors.white),
+            ),
+            trailing: Transform.scale(
+              scale: 0.8,
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.arrow_forward),
+              ),
+            ),
+            // onTap: () {},
+            onTap: () async {
+              Provider.of<ChatsProvider>(context, listen: false).sendMessage({
+                "sender": "user1",
+                "message": suggestedJokes[index].jokeTitle,
+              }, selectedChatId, true);
+              String error = await Provider.of<ChatsProvider>(context,
+                      listen: false)
+                  .sendRequest(suggestedJokes[index].jokeTitle, selectedChatId);
+              showHome(false);
+              if (error.isNotEmpty) {
+                if (!context.mounted) return;
 
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Error"),
-                              content: Text(error),
-                            );
-                          });
-                    }
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Error"),
+                      content: Text(error),
+                    );
                   },
-                ),
-              );
+                );
+              }
             },
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
