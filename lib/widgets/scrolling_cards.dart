@@ -23,7 +23,7 @@ class ScrollingCards extends StatelessWidget {
   Widget build(BuildContext context) {
     Random random = Random();
     return SizedBox(
-      height: 200,
+      height: 180,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: cardTitles.length,

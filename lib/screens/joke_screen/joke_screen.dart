@@ -82,7 +82,6 @@ class ChatScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                // const Spacer(),
                 Container(
                   height: 60,
                   padding: const EdgeInsets.all(8),

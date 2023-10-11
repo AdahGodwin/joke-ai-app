@@ -21,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.amberAccent,
         title: Row(
           children: [
             Container(
@@ -58,7 +59,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.grey[100],
@@ -69,17 +70,30 @@ class HomeScreen extends StatelessWidget {
                 onPressed: isDrawerOpen ? closeDrawer : openDrawer,
               ),
             ),
-            const Text(
-              'Hello',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Text(
+                      'Hello',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    ),
+                    const Text(
+                        'You have several jokes to laugh and ease your stress'),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    ScrollingCards(),
+                  ],
+                ),
+              ),
             ),
-            const Text('You have several jokes to laugh and ease your stress'),
             const SizedBox(
-              height: 20.0,
-            ),
-            ScrollingCards(),
-            const SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             const Text(
               'Suggested Jokes',
@@ -87,14 +101,15 @@ class HomeScreen extends StatelessWidget {
             ),
             const Text('Ask for a joke and get a cool response'),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             Expanded(
-              child: JokeSuggestion(
-                  selectedChatId: selectedJokeId, showHome: showHome),
-            ),
+                child: JokeSuggestion(
+              selectedChatId: selectedJokeId,
+              showHome: showHome,
+            )),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
