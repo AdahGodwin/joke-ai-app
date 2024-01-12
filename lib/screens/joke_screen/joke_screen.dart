@@ -40,7 +40,7 @@ class ChatScreen extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.all(4.0),
                       child: IconButton(
-                        icon: Image.asset('assets/icons/menu-icon.png'),
+                        icon: const Icon(Icons.menu),
                         onPressed: isDrawerOpen ? closeDrawer : openDrawer,
                       ),
                     ),
@@ -50,7 +50,7 @@ class ChatScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 chat.messages!.isEmpty
                     ? const Expanded(

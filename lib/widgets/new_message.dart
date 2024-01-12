@@ -6,10 +6,8 @@ class NewMessage extends StatefulWidget {
   const NewMessage({
     super.key,
     required this.chatId,
-    this.showHome,
   });
   final String chatId;
-  final Function(bool value)? showHome;
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -18,27 +16,32 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
 
-  void _sendMessage(String messageId) async {
-    FocusNode().unfocus();
+  void _sendMessage() async {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
     if (_messageController.text.trim().isNotEmpty) {
       Provider.of<ChatsProvider>(context, listen: false).sendMessage(
-          {"sender": "user1", "message": _messageController.text},
+          {"role": "user", "content": _messageController.text.trim()},
           widget.chatId,
           true);
       _messageController.clear();
-      String error = await Provider.of<ChatsProvider>(context, listen: false)
-          .sendRequest(_messageController.text, widget.chatId);
-      if (error.isNotEmpty) {
+      String? error = await Provider.of<ChatsProvider>(context, listen: false)
+          .sendRequest(widget.chatId);
+      if (error != null && error.isNotEmpty) {
         if (!context.mounted) return;
 
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text("Error"),
-                content: Text(error),
-              );
-            });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              error,
+              style: const TextStyle(fontSize: 16),
+            ),
+            duration: const Duration(seconds: 10),
+          ),
+        );
       }
     }
   }
@@ -65,14 +68,7 @@ class _NewMessageState extends State<NewMessage> {
           child: Center(
             child: IconButton(
               color: const Color.fromRGBO(255, 255, 255, 1),
-              onPressed: () {
-                String messageId =
-                    DateTime.now().millisecondsSinceEpoch.toString();
-                _sendMessage(messageId);
-                if (widget.showHome != null) {
-                  widget.showHome!(false);
-                }
-              },
+              onPressed: _sendMessage,
               icon: const Icon(Icons.send),
             ),
           ),

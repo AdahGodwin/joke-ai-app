@@ -1,6 +1,7 @@
-import "package:flutter/material.dart";
-import "package:hngx_openai/repository/openai_repository.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:jokes_ai_app/db_helper/db_helper.dart';
 
 class Chat {
   Chat({
@@ -17,10 +18,11 @@ class Chat {
 }
 
 class ChatsProvider with ChangeNotifier {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  OpenAIRepository openAI = OpenAIRepository();
+  final String openaiApiKey =
+      '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';
   bool _isTyping = false;
-  final List<Chat> _chatList = [];
+  List<Chat> _chatList = [];
+
   bool get isTyping {
     return _isTyping;
   }
@@ -29,21 +31,28 @@ class ChatsProvider with ChangeNotifier {
     return [..._chatList];
   }
 
-  String createChat(String userId, [bool notify = true]) {
-    String chatId = DateTime.now().millisecondsSinceEpoch.toString();
-    _chatList.insert(
-        0,
-        Chat(
-          userId: userId,
-          chatId: chatId,
-          chatTitle: "New Joke",
-          messages: [],
-        ));
+  Future<String> createChat(String userId, [bool notify = true]) async {
+    String id = DateTime.now().millisecondsSinceEpoch.toString();
+    await DBHelper.insert("chats", {
+      "id": id,
+      "userId": userId,
+      "title": "New Joke",
+      "messages": "",
+    });
+    await fetchAndSetChats();
+    // _chatList.insert(
+    //     0,
+    //     Chat(
+    //       userId: userId,
+    //       chatId: chatId,
+    //       chatTitle: "New Joke",
+    //       messages: [],
+    //     ));
     if (notify == true) {
       notifyListeners();
     }
 
-    return chatId;
+    return id;
   }
 
   Chat getChatbyId(String id) {
@@ -58,16 +67,17 @@ class ChatsProvider with ChangeNotifier {
     return chat[0];
   }
 
-  String getRecentChatId(userId) {
+  Future<String> getRecentChatId(userId) async {
+    await fetchAndSetChats();
     if (_chatList.isEmpty) {
-      String chatId = createChat(userId, false);
+      String chatId = await createChat(userId, false);
       return chatId;
     }
 
     List<Chat> emptyChat =
         _chatList.where((chat) => chat.messages!.isEmpty).toList();
     if (emptyChat.isEmpty) {
-      String chatId = createChat(userId, false);
+      String chatId = await createChat(userId, false);
       return chatId;
     }
     return emptyChat[0].chatId;
@@ -75,16 +85,14 @@ class ChatsProvider with ChangeNotifier {
 
   void sendMessage(Map<String, dynamic> message, String chatId, bool typing) {
     Chat chat = _chatList.where((chat) => chat.chatId == chatId).toList()[0];
-    chat.messages?.add(message);
-    if (chat.messages!.length == 1) {
-      if (chat.messages != null && chat.messages!.isNotEmpty) {
-        chat.chatTitle = chat.messages![0]['message'];
 
-        if (chat.chatTitle.length > 50) {
-          chat.chatTitle = '${chat.chatTitle.substring(0, 50)}...';
-        }
-      }
-    }
+    chat.messages?.add(message);
+    DBHelper.update(
+      'chats',
+      {'messages': jsonEncode(chat.messages)},
+      'id',
+      chatId,
+    );
     _isTyping = typing;
     notifyListeners();
   }
@@ -93,34 +101,102 @@ class ChatsProvider with ChangeNotifier {
   //   _chatList.clear();
   //   notifyListeners();
   // }
-  String filterText(String response) {
-    if (response.startsWith("M")) {
-      return response.substring(8).trim();
-    } else {
-      return response.substring(6);
-    }
-  }
+  // String filterText(String response) {
+  //   if (response.startsWith("M")) {
+  //     return response.substring(8).trim();
+  //   } else {
+  //     return response.substring(6);
+  //   }
+  // }
 
-  Future<dynamic> sendRequest(userInput, String chatId) async {
-    final SharedPreferences prefs = await _prefs;
-    String cookie = prefs.getString("cookie")!;
+  Future<dynamic> sendRequest(String chatId) async {
+    Chat chat = _chatList.where((chat) => chat.chatId == chatId).toList()[0];
 
     try {
-      final aiResponse = await openAI.getChat(userInput, cookie);
-      if (aiResponse.toLowerCase().contains("error")) {
-        _isTyping = false;
-        return filterText(aiResponse);
-      } else {
-        _isTyping = false;
-        String response = filterText(aiResponse);
-        String id = DateTime.now().millisecondsSinceEpoch.toString();
-        sendMessage(
-            {"id": id, "sender": "bot", "message": response}, chatId, false);
+      final openaiEndpoint =
+          Uri.parse('https://api.openai.com/v1/chat/completions');
+      final openaiHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $openaiApiKey',
+      };
+
+      final openaiData = {
+        'model': 'gpt-3.5-turbo',
+        "max_tokens": 150,
+        "temperature": 0.2,
+        'messages': [
+          {
+            'role': 'system',
+            'content':
+                'You are a friendly Nigerian comedian that understands pidgin as well as English,Every reply should be comedic, don\'t tell dad jokes, tell jokes the way Nigerian comedians like Bovi, Apororo, Basketmouth and the likes would, you are only a comedian that understands jokes. Your response shouldn\'t be more than 25 words'
+          },
+          ...?chat.messages
+        ],
+      };
+
+      final response = await http.post(
+        openaiEndpoint,
+        headers: openaiHeaders,
+        body: jsonEncode(openaiData),
+      );
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      print(data);
+      String? chatReply = data['choices'][0]['message']['content'];
+
+      sendMessage({"role": "assistant", "content": chatReply}, chatId, false);
+
+      if (chat.messages!.isNotEmpty && chat.chatTitle == "New Joke") {
+        final response = await http.post(
+          openaiEndpoint,
+          headers: openaiHeaders,
+          body: jsonEncode({
+            'model': 'gpt-3.5-turbo',
+            "max_tokens": 50,
+            "temperature": 0.2,
+            'messages': [
+              {
+                'role': 'system',
+                'content':
+                    'Suggest a short comedic, and suitable title of not more than 5 words for the chat'
+              },
+              ...?chat.messages
+            ],
+          }),
+        );
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        chat.chatTitle = data['choices'][0]['message']['content'];
+
+        if (chat.chatTitle.length > 50) {
+          chat.chatTitle = '${chat.chatTitle.substring(0, 50)}...';
+        }
       }
+    } on http.ClientException {
+      _isTyping = false;
+      notifyListeners();
+      return "Please Check Your Internet Connection";
     } catch (error) {
       _isTyping = false;
-      return "An error occured";
+      notifyListeners();
+      print('$error is coming from here');
+      return error.toString();
     }
+    _isTyping = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetChats() async {
+    final dataList = await DBHelper.getData('chats');
+    _chatList = dataList
+        .map((chat) => Chat(
+              chatId: chat['id'],
+              userId: chat['userId'],
+              chatTitle: chat['title'],
+              messages: chat['messages'] == ""
+                  ? []
+                  : List<Map<String, dynamic>>.from(
+                      jsonDecode(chat['messages'])),
+            ))
+        .toList();
     notifyListeners();
   }
 }

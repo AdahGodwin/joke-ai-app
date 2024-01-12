@@ -1,27 +1,20 @@
-import 'dart:convert';
+// import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:hng_authentication/authentication.dart';
-import 'package:hng_authentication/widgets/widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:jokes_ai_app/providers/chats_provider.dart';
-// import 'package:jokes_ai_app/providers/openai.dart';
 
 class JokeListScreen extends StatelessWidget {
   const JokeListScreen({
     super.key,
     required this.setJokeId,
     required this.selectedJokeId,
-    required this.showHome,
-    required this.showHomePage,
   });
 
   final Function(String id) setJokeId;
   final String selectedJokeId;
-  final Function(bool value) showHome;
-  final bool showHomePage;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +25,7 @@ class JokeListScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.only(top: 20.0, left: 10, bottom: 20),
-            width: 280,
+            width: 260,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,10 +40,12 @@ class JokeListScreen extends StatelessWidget {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      String jokeId =
-                          Provider.of<ChatsProvider>(context, listen: false)
-                              .createChat("user1");
-                      setJokeId(jokeId);
+                      Provider.of<ChatsProvider>(context, listen: false)
+                          .createChat("user1")
+                          .then((jokeId) {
+                        print("the id : $jokeId");
+                        setJokeId(jokeId);
+                      });
                     },
                     icon: const Icon(Icons.add),
                     label: const Text(
@@ -109,15 +104,7 @@ class JokeListScreen extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
-                        onPressed: () {
-                          if (showHomePage == false) {
-                            String id = Provider.of<ChatsProvider>(context,
-                                    listen: false)
-                                .getRecentChatId("user1");
-                            setJokeId(id);
-                            showHome(true);
-                          }
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.home,
                           size: 25,
@@ -132,15 +119,7 @@ class JokeListScreen extends StatelessWidget {
                       backgroundColor: Colors.grey[100],
                       child: IconButton(
                         onPressed: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          final user = jsonDecode(prefs.getString("user")!);
-                          await Authentication().logout(user["email"]);
-                          if (!context.mounted) return;
-
-                          showSnackbar(
-                              context, Colors.blue, "Logout Successful");
-
-                          Navigator.of(context).pushReplacementNamed("/");
+                          await FirebaseAuth.instance.signOut();
                         },
                         icon: const Icon(
                           Icons.logout,

@@ -20,17 +20,16 @@ class MessageBubble extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            // color: isMe ? Colors.blue : Colors.green,
-            color: backgroundColor,
+            color: isMe ? Colors.blue : Colors.green,
             borderRadius: BorderRadius.only(
               topRight:
-                  isMe ? const Radius.circular(0) : const Radius.circular(15),
+                  isMe ? const Radius.circular(0) : const Radius.circular(20),
               topLeft:
-                  isMe ? const Radius.circular(50) : const Radius.circular(0),
+                  isMe ? const Radius.circular(20) : const Radius.circular(0),
               bottomLeft:
-                  isMe ? const Radius.circular(50) : const Radius.circular(25),
+                  isMe ? const Radius.circular(20) : const Radius.circular(25),
               bottomRight:
-                  isMe ? const Radius.circular(50) : const Radius.circular(15),
+                  isMe ? const Radius.circular(25) : const Radius.circular(20),
             ),
             border: Border.all(
               color: Colors.blueGrey,
@@ -49,9 +48,10 @@ class MessageBubble extends StatelessWidget {
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
           child: Text(
-            message?['message'] ?? "",
-            style: TextStyle(
-              color: isMe ? Colors.white : Colors.black,
+            message?['content'] ?? "",
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
             ),
             textAlign: TextAlign.start,
           ),

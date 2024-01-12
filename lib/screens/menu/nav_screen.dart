@@ -19,25 +19,23 @@ class _NavScreenState extends State<NavScreen> {
   bool isDrawerOpen = false;
   String selectedJokeId = "";
   bool showJoke = false;
-  bool showHomePage = true;
-
+  bool isInit = false;
   @override
   void initState() {
     super.initState();
-    selectedJokeId = Provider.of<ChatsProvider>(context, listen: false)
-        .getRecentChatId("user1");
-  }
 
-  void showHome(bool value) {
-    setState(() {
-      showHomePage = value;
+    Provider.of<ChatsProvider>(context, listen: false)
+        .getRecentChatId("user1")
+        .then((value) {
+      setState(() {
+        selectedJokeId = value;
+        isInit = true;
+      });
     });
-    closeDrawer();
   }
 
   void setJokeId(id) {
     setState(() {
-      showHomePage = false;
       showJoke = true;
       selectedJokeId = id;
     });
@@ -52,15 +50,21 @@ class _NavScreenState extends State<NavScreen> {
       currentFocus.unfocus();
       Future.delayed(const Duration(milliseconds: 180), () {
         setState(() {
-          xOffset = 300;
-          yOffset = 30;
+          // xOffset = 300;
+          // yOffset = 30;
+          xOffset = 260;
+          yOffset = 150;
+          scaleFactor = 0.8;
           isDrawerOpen = true;
         });
       });
     } else {
       setState(() {
-        xOffset = 300;
-        yOffset = 30;
+        // xOffset = 300;
+        // yOffset = 30;
+        xOffset = 260;
+        yOffset = 150;
+        scaleFactor = 0.8;
         isDrawerOpen = true;
       });
     }
@@ -80,28 +84,28 @@ class _NavScreenState extends State<NavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          JokeListScreen(
-            setJokeId: setJokeId,
-            selectedJokeId: selectedJokeId,
-            showHome: showHome,
-            showHomePage: showHomePage,
-          ),
-          CurrentScreen(
-            isDrawerOpen: isDrawerOpen,
-            xOffset: xOffset,
-            yOffset: yOffset,
-            scaleFactor: scaleFactor,
-            closeDrawer: closeDrawer,
-            openDrawer: openDrawer,
-            selectedJokeId: selectedJokeId,
-            showJoke: showJoke,
-            showHome: showHome,
-            showHomePage: showHomePage,
-          ),
-        ],
-      ),
+      body: isInit == false
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Stack(
+              children: [
+                JokeListScreen(
+                  setJokeId: setJokeId,
+                  selectedJokeId: selectedJokeId,
+                ),
+                CurrentScreen(
+                  isDrawerOpen: isDrawerOpen,
+                  xOffset: xOffset,
+                  yOffset: yOffset,
+                  scaleFactor: scaleFactor,
+                  closeDrawer: closeDrawer,
+                  openDrawer: openDrawer,
+                  selectedJokeId: selectedJokeId,
+                  showJoke: showJoke,
+                ),
+              ],
+            ),
     );
   }
 }

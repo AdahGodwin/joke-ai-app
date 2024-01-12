@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hng_authentication/authentication.dart';
-import 'package:hng_authentication/widgets/rounded_bordered_textfield.dart';
-import 'package:hng_authentication/widgets/widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -18,8 +15,58 @@ class LoginFormState extends State<LoginForm> {
   bool _obscurePassword = true;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool _isLoading = false;
+  final _auth = FirebaseAuth.instance;
+
+  void _submitForm(
+    String email,
+    String password,
+    BuildContext ctx,
+  ) async {
+    // ignore: unused_local_variable
+    UserCredential authResult;
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      authResult = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+    } on PlatformException catch (err) {
+      var message = 'An error occurred, please check your credentials';
+
+      if (err.message != null) {
+        message = err.message as String;
+      }
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(ctx).colorScheme.error,
+        ),
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text(err.toString()),
+          backgroundColor: Theme.of(ctx).colorScheme.error,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,37 +132,53 @@ class LoginFormState extends State<LoginForm> {
                   const SizedBox(
                     height: 30,
                   ),
-                  RoundedBorderedTextField(
-                    hintText: "Email Address",
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return 'Please Enter a valid email address';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Email Address",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
                     keyboardType: TextInputType.emailAddress,
                     controller: emailController,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  RoundedBorderedTextField(
-                    hintText: "Enter Password",
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: "Enter Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
+                    ),
                     obscureText: _obscurePassword,
                     controller: passwordController,
-                    isPass: true,
-                    icon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.blue,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
-                  isLoading == true
+                  _isLoading == true
                       ? const CircularProgressIndicator(
                           color: Colors.blue,
                         )
@@ -131,65 +194,10 @@ class LoginFormState extends State<LoginForm> {
                             onPressed: emailController.text.isEmpty |
                                     passwordController.text.isEmpty
                                 ? null
-                                : () async {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
+                                : () {
                                     final email = (emailController).text;
                                     final password = (passwordController).text;
-                                    final authRepository = Authentication();
-
-                                    try {
-                                      final data = await authRepository.signIn(
-                                          email, password);
-                                      if (data != null) {
-                                        final SharedPreferences prefs =
-                                            await _prefs;
-                                        prefs.setString(
-                                          "cookie",
-                                          data.cookie,
-                                        );
-                                        prefs.setString(
-                                            "user",
-                                            jsonEncode({
-                                              "id": data.id,
-                                              "name": data.name,
-                                              "email": data.email,
-                                              "cookie": data.cookie,
-                                              "credits": data.credits,
-                                            }));
-
-                                        if (!context.mounted) return;
-                                        showSnackbar(context, Colors.blue,
-                                            "Sign in Successfull");
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        Navigator.of(context)
-                                            .pushReplacementNamed("/");
-                                      } else {
-                                        if (!context.mounted) return;
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        showSnackbar(
-                                          context,
-                                          Colors.red,
-                                          "An Error Occured",
-                                        );
-                                      }
-                                    } catch (error) {
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                      if (!context.mounted) return;
-
-                                      showSnackbar(
-                                        context,
-                                        Colors.red,
-                                        "An Error Occured",
-                                      );
-                                    }
+                                    _submitForm(email, password, context);
                                   },
                             child: Text(
                               "Login",
@@ -219,7 +227,7 @@ class LoginFormState extends State<LoginForm> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacementNamed("/signup");
+                          Navigator.of(context).pop();
                         },
                         child: Text(
                           "Sign up",

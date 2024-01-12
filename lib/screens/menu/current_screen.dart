@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:jokes_ai_app/screens/joke_screen/joke_screen.dart';
-import 'package:jokes_ai_app/screens/home_screen.dart';
 
 class CurrentScreen extends StatelessWidget {
   const CurrentScreen({
@@ -16,8 +13,6 @@ class CurrentScreen extends StatelessWidget {
     required this.openDrawer,
     required this.selectedJokeId,
     required this.showJoke,
-    required this.showHomePage,
-    required this.showHome,
   });
   final String selectedJokeId;
   final bool isDrawerOpen;
@@ -27,27 +22,28 @@ class CurrentScreen extends StatelessWidget {
   final double yOffset;
   final double scaleFactor;
   final bool showJoke;
-  final bool showHomePage;
-  final Function(bool value) showHome;
 
   @override
   Widget build(BuildContext context) {
-    Chat selectedJoke =
-        Provider.of<ChatsProvider>(context).getRecentChat(selectedJokeId);
-
     return GestureDetector(
       onTap: closeDrawer,
       child: AnimatedContainer(
         transform: Matrix4.translationValues(xOffset, yOffset, 0)
-          ..scale(scaleFactor),
+          ..scale(scaleFactor)
+          ..rotateZ(isDrawerOpen ? 24.999 : 0),
         duration: const Duration(milliseconds: 400),
-        curve: Curves.easeIn,
+        curve: Curves.ease,
         decoration: BoxDecoration(
           boxShadow: const [
             BoxShadow(
               color: Color.fromARGB(239, 233, 232, 232),
-              blurRadius: 10,
-              offset: Offset(-5, 0),
+              blurRadius: 3,
+              offset: Offset(-15, 15),
+            ),
+            BoxShadow(
+              color: Color.fromARGB(238, 204, 203, 203),
+              blurRadius: 2,
+              offset: Offset(0, 0),
             ),
           ],
           borderRadius: BorderRadius.circular(25),
@@ -56,21 +52,12 @@ class CurrentScreen extends StatelessWidget {
           absorbing: isDrawerOpen,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-            child: selectedJoke.messages!.isEmpty && showJoke == false ||
-                    showHomePage == true
-                ? HomeScreen(
-                    openDrawer: openDrawer,
-                    closeDrawer: closeDrawer,
-                    isDrawerOpen: isDrawerOpen,
-                    selectedJokeId: selectedJokeId,
-                    showHome: showHome,
-                  )
-                : ChatScreen(
-                    openDrawer: openDrawer,
-                    closeDrawer: closeDrawer,
-                    isDrawerOpen: isDrawerOpen,
-                    selectedJokeId: selectedJokeId,
-                  ),
+            child: ChatScreen(
+              openDrawer: openDrawer,
+              closeDrawer: closeDrawer,
+              isDrawerOpen: isDrawerOpen,
+              selectedJokeId: selectedJokeId,
+            ),
           ),
         ),
       ),
