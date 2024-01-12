@@ -18,8 +18,7 @@ class Chat {
 }
 
 class ChatsProvider with ChangeNotifier {
-  final String openaiApiKey =
-      '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';
+  final String openaiApiKey = 'API_KEY';
   bool _isTyping = false;
   List<Chat> _chatList = [];
 
