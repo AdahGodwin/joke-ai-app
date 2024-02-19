@@ -17,31 +17,7 @@ class _NavScreenState extends State<NavScreen> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool isDrawerOpen = false;
-  String selectedJokeId = "";
   bool showJoke = false;
-  bool isInit = false;
-  @override
-  void initState() {
-    super.initState();
-
-    Provider.of<ChatsProvider>(context, listen: false)
-        .getRecentChatId("user1")
-        .then((value) {
-      setState(() {
-        selectedJokeId = value;
-        isInit = true;
-      });
-    });
-  }
-
-  void setJokeId(id) {
-    setState(() {
-      showJoke = true;
-      selectedJokeId = id;
-    });
-
-    closeDrawer();
-  }
 
   void openDrawer() {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -52,7 +28,7 @@ class _NavScreenState extends State<NavScreen> {
         setState(() {
           // xOffset = 300;
           // yOffset = 30;
-          xOffset = 260;
+          xOffset = 270;
           yOffset = 150;
           scaleFactor = 0.8;
           isDrawerOpen = true;
@@ -62,7 +38,7 @@ class _NavScreenState extends State<NavScreen> {
       setState(() {
         // xOffset = 300;
         // yOffset = 30;
-        xOffset = 260;
+        xOffset = 270;
         yOffset = 150;
         scaleFactor = 0.8;
         isDrawerOpen = true;
@@ -83,29 +59,27 @@ class _NavScreenState extends State<NavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String selectedJokeId =
+        Provider.of<ChatsProvider>(context).getRecentChatId();
+
     return Scaffold(
-      body: isInit == false
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Stack(
-              children: [
-                JokeListScreen(
-                  setJokeId: setJokeId,
-                  selectedJokeId: selectedJokeId,
-                ),
-                CurrentScreen(
-                  isDrawerOpen: isDrawerOpen,
-                  xOffset: xOffset,
-                  yOffset: yOffset,
-                  scaleFactor: scaleFactor,
-                  closeDrawer: closeDrawer,
-                  openDrawer: openDrawer,
-                  selectedJokeId: selectedJokeId,
-                  showJoke: showJoke,
-                ),
-              ],
-            ),
+      body: Stack(
+        children: [
+          JokeListScreen(
+            closeDrawer: closeDrawer,
+            selectedJokeId: selectedJokeId,
+          ),
+          CurrentScreen(
+            isDrawerOpen: isDrawerOpen,
+            xOffset: xOffset,
+            yOffset: yOffset,
+            scaleFactor: scaleFactor,
+            closeDrawer: closeDrawer,
+            openDrawer: openDrawer,
+            selectedJokeId: selectedJokeId,
+          ),
+        ],
+      ),
     );
   }
 }

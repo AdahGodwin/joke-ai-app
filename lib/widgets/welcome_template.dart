@@ -1,47 +1,18 @@
 import 'package:flutter/material.dart';
+import './logo_text.dart';
 
 class WelcomeTemplate extends StatelessWidget {
   const WelcomeTemplate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
+        LogoText(),
+        SizedBox(
+          height: 30,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              child: const Text(
-                "JOKES",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              width: 40,
-              height: 40,
-              padding: const EdgeInsets.all(4),
-              color: Colors.blue,
-              child: const Center(
-                child: Text(
-                  "AI",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 50,
-        ),
-        const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
@@ -50,11 +21,14 @@ class WelcomeTemplate extends StatelessWidget {
             ),
             Text(
               "Capabilities",
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
-        const Card(
+        Card(
           margin: EdgeInsets.all(10),
           elevation: 3,
           child: Padding(
@@ -65,7 +39,7 @@ class WelcomeTemplate extends StatelessWidget {
             ),
           ),
         ),
-        const Card(
+        Card(
           margin: EdgeInsets.all(10),
           elevation: 3,
           child: Padding(
@@ -76,10 +50,10 @@ class WelcomeTemplate extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(
+        SizedBox(
           height: 30,
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
@@ -88,28 +62,42 @@ class WelcomeTemplate extends StatelessWidget {
             ),
             Text(
               "Suggestions",
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
-        const Card(
+        Card(
           margin: EdgeInsets.all(10),
           elevation: 3,
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              "Tell A Joke about fishes",
+              "Why don't Nigerian witches ride brooms?",
               textAlign: TextAlign.center,
             ),
           ),
         ),
-        const Card(
+        Card(
           margin: EdgeInsets.all(10),
           elevation: 3,
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              "Write a Joke about ShakeSpeare",
+              "Why did the yam blush?",
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+        Card(
+          margin: EdgeInsets.all(10),
+          elevation: 3,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              "Who made you like this?",
               textAlign: TextAlign.center,
             ),
           ),

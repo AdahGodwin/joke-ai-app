@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:jokes_ai_app/local_notifications.dart';
 import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -16,20 +17,22 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   final _messageController = TextEditingController();
 
-  void _sendMessage() async {
+  void _sendMessage(BuildContext context, String chatId) async {
+    ChatsProvider chatsProvider =
+        Provider.of<ChatsProvider>(context, listen: false);
     FocusScopeNode currentFocus = FocusScope.of(context);
 
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
     if (_messageController.text.trim().isNotEmpty) {
-      Provider.of<ChatsProvider>(context, listen: false).sendMessage(
+      if (!context.mounted) return;
+      chatsProvider.sendMessage(
           {"role": "user", "content": _messageController.text.trim()},
-          widget.chatId,
+          chatId,
           true);
       _messageController.clear();
-      String? error = await Provider.of<ChatsProvider>(context, listen: false)
-          .sendRequest(widget.chatId);
+      String? error = await chatsProvider.sendRequest(chatId);
       if (error != null && error.isNotEmpty) {
         if (!context.mounted) return;
 
@@ -39,7 +42,7 @@ class _NewMessageState extends State<NewMessage> {
               error,
               style: const TextStyle(fontSize: 16),
             ),
-            duration: const Duration(seconds: 10),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -68,7 +71,17 @@ class _NewMessageState extends State<NewMessage> {
           child: Center(
             child: IconButton(
               color: const Color.fromRGBO(255, 255, 255, 1),
-              onPressed: _sendMessage,
+              onPressed: () async {
+                if (widget.chatId == "newchat") {
+                  String newId =
+                      await Provider.of<ChatsProvider>(context, listen: false)
+                          .createChat();
+                  if (!context.mounted) return;
+                  _sendMessage(context, newId);
+                } else {
+                  _sendMessage(context, widget.chatId);
+                }
+              },
               icon: const Icon(Icons.send),
             ),
           ),

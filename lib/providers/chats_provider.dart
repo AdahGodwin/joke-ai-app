@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jokes_ai_app/db_helper/db_helper.dart';
+
+String useruid = FirebaseAuth.instance.currentUser!.uid;
 
 class Chat {
   Chat({
@@ -15,74 +18,89 @@ class Chat {
   final String chatId;
   String chatTitle;
   final List<Map<String, dynamic>>? messages;
+  bool pressed = false;
 }
 
 class ChatsProvider with ChangeNotifier {
-  final String openaiApiKey = 'API_KEY';
+  String selectedJokeId = "newchat";
+
+  final String openaiApiKey = "API-KEY";
   bool _isTyping = false;
-  List<Chat> _chatList = [];
+
+  Chat defaultChat = Chat(
+    userId: useruid,
+    chatId: "newchat",
+    chatTitle: "New Joke",
+    messages: [],
+  );
+  List<Chat> _chatList = [
+    Chat(
+        userId: useruid,
+        chatId: "newchat",
+        chatTitle: "New Joke",
+        messages: []),
+    Chat(
+        userId: useruid,
+        chatId: "newchat",
+        chatTitle: "New Joke",
+        messages: []),
+    Chat(
+        userId: useruid,
+        chatId: "newchat",
+        chatTitle: "New Joke",
+        messages: []),
+  ];
 
   bool get isTyping {
     return _isTyping;
   }
 
   List<Chat> get allChats {
-    return [..._chatList];
+    return [..._chatList.reversed];
   }
 
-  Future<String> createChat(String userId, [bool notify = true]) async {
+  Future<String> createChat([bool notify = true]) async {
     String id = DateTime.now().millisecondsSinceEpoch.toString();
     await DBHelper.insert("chats", {
       "id": id,
-      "userId": userId,
+      "userId": useruid,
       "title": "New Joke",
       "messages": "",
     });
     await fetchAndSetChats();
-    // _chatList.insert(
-    //     0,
-    //     Chat(
-    //       userId: userId,
-    //       chatId: chatId,
-    //       chatTitle: "New Joke",
-    //       messages: [],
-    //     ));
-    if (notify == true) {
-      notifyListeners();
-    }
 
+    selectedJokeId = id;
+    notifyListeners();
     return id;
   }
 
   Chat getChatbyId(String id) {
+    if (id == "newchat") {
+      return defaultChat;
+    }
+
     List<Chat> chat = _chatList.where((chat) => chat.chatId == id).toList();
 
     return chat[0];
   }
 
-  Chat getRecentChat(id) {
-    List<Chat> chat = _chatList.where((chat) => chat.chatId == id).toList();
-
-    return chat[0];
+  String getRecentChatId() {
+    fetchAndSetChats();
+    return selectedJokeId;
   }
 
-  Future<String> getRecentChatId(userId) async {
-    await fetchAndSetChats();
-    if (_chatList.isEmpty) {
-      String chatId = await createChat(userId, false);
-      return chatId;
-    }
-
-    List<Chat> emptyChat =
-        _chatList.where((chat) => chat.messages!.isEmpty).toList();
-    if (emptyChat.isEmpty) {
-      String chatId = await createChat(userId, false);
-      return chatId;
-    }
-    return emptyChat[0].chatId;
+  String convertString(String text) {
+    List<int> bytes = text.toString().codeUnits;
+    return utf8.decode(bytes);
   }
 
-  void sendMessage(Map<String, dynamic> message, String chatId, bool typing) {
+  void setSelectedId(String id) {
+    selectedJokeId = id;
+    notifyListeners();
+  }
+
+  void sendMessage(
+      Map<String, dynamic> message, String chatId, bool typing) async {
     Chat chat = _chatList.where((chat) => chat.chatId == chatId).toList()[0];
 
     chat.messages?.add(message);
@@ -96,21 +114,9 @@ class ChatsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // void clearChats() {
-  //   _chatList.clear();
-  //   notifyListeners();
-  // }
-  // String filterText(String response) {
-  //   if (response.startsWith("M")) {
-  //     return response.substring(8).trim();
-  //   } else {
-  //     return response.substring(6);
-  //   }
-  // }
-
+  // Send Request to OpenAI
   Future<dynamic> sendRequest(String chatId) async {
     Chat chat = _chatList.where((chat) => chat.chatId == chatId).toList()[0];
-
     try {
       final openaiEndpoint =
           Uri.parse('https://api.openai.com/v1/chat/completions');
@@ -121,13 +127,13 @@ class ChatsProvider with ChangeNotifier {
 
       final openaiData = {
         'model': 'gpt-3.5-turbo',
-        "max_tokens": 150,
-        "temperature": 0.2,
+        "max_tokens": 180,
+        "temperature": 1,
         'messages': [
           {
             'role': 'system',
             'content':
-                'You are a friendly Nigerian comedian that understands pidgin as well as English,Every reply should be comedic, don\'t tell dad jokes, tell jokes the way Nigerian comedians like Bovi, Apororo, Basketmouth and the likes would, you are only a comedian that understands jokes. Your response shouldn\'t be more than 25 words'
+                'You are a friendly Nigerian comedian that understands pidgin as well as English,Every reply should be comedic, don\'t tell any joke that starts with why, tell jokes the way Nigerian comedians like Bovi, Apororo, Basketmouth and others would, you can only tell jokes, don\'t write any form of code. Your response shouldn\'t be more than 25 words. Your creator/developer is Godwin Adah also known as Cypher'
           },
           ...?chat.messages
         ],
@@ -139,8 +145,8 @@ class ChatsProvider with ChangeNotifier {
         body: jsonEncode(openaiData),
       );
       final Map<String, dynamic> data = jsonDecode(response.body);
-      print(data);
-      String? chatReply = data['choices'][0]['message']['content'];
+      String? chatReply =
+          convertString(data['choices'][0]['message']['content']);
 
       sendMessage({"role": "assistant", "content": chatReply}, chatId, false);
 
@@ -156,18 +162,26 @@ class ChatsProvider with ChangeNotifier {
               {
                 'role': 'system',
                 'content':
-                    'Suggest a short comedic, and suitable title of not more than 5 words for the chat'
+                    'Suggest a short comedic, and suitable title of not more than 5 words for the chat.'
               },
               ...?chat.messages
             ],
           }),
         );
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        chat.chatTitle = data['choices'][0]['message']['content'];
 
-        if (chat.chatTitle.length > 50) {
-          chat.chatTitle = '${chat.chatTitle.substring(0, 50)}...';
-        }
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        String newTitle =
+            convertString(data['choices'][0]['message']['content']);
+
+        //update chat title
+        DBHelper.update(
+          'chats',
+          {'title': newTitle.replaceAll('"', '')},
+          'id',
+          chat.chatId,
+        );
+
+        await fetchAndSetChats();
       }
     } on http.ClientException {
       _isTyping = false;
@@ -176,7 +190,6 @@ class ChatsProvider with ChangeNotifier {
     } catch (error) {
       _isTyping = false;
       notifyListeners();
-      print('$error is coming from here');
       return error.toString();
     }
     _isTyping = false;
@@ -197,5 +210,21 @@ class ChatsProvider with ChangeNotifier {
             ))
         .toList();
     notifyListeners();
+  }
+
+  Future<void> clearChat() async {
+    await DBHelper.clearDb("chats");
+    await fetchAndSetChats();
+    selectedJokeId = defaultChat.chatId;
+    notifyListeners();
+  }
+
+  Future<void> clearOneChat(String id) async {
+    if (id == selectedJokeId) {
+      selectedJokeId = defaultChat.chatId;
+      notifyListeners();
+    }
+    await DBHelper.deleteOne("chats", "id", id);
+    await fetchAndSetChats();
   }
 }

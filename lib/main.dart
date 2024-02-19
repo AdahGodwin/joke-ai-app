@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:jokes_ai_app/local_notifications.dart';
+// import 'package:jokes_ai_app/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:jokes_ai_app/providers/chats_provider.dart';
 import 'package:jokes_ai_app/screens/Auth/login_screen.dart';
@@ -13,6 +14,7 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // await LocalNotifications.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -37,7 +39,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
+          fontFamily: "Chakra Petch",
         ),
+        // home: const SettingsScreen(),
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

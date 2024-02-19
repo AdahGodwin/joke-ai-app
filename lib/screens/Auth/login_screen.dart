@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../widgets/logo_text.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -81,156 +81,117 @@ class LoginFormState extends State<LoginForm> {
             bottom: 30,
           ),
           child: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        child: const Text(
-                          "JOKES",
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
+            child: Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: screenWidth > 500 ? 400 : double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const LogoText(),
+                    const SizedBox(
+                      height: 70,
+                    ),
+                    Text(
+                      "Login Account",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          letterSpacing: .5,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value!.isEmpty || !value.contains('@')) {
+                          return 'Please Enter a valid email address';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Email Address",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: "Enter Password",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.blue,
                           ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
                         ),
                       ),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        padding: const EdgeInsets.all(4),
-                        color: Colors.blue,
-                        child: const Center(
-                          child: Text(
-                            "AI",
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 70,
-                  ),
-                  Text(
-                    "Login Account",
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        letterSpacing: .5,
-                        fontSize: 20,
-                      ),
+                      obscureText: _obscurePassword,
+                      controller: passwordController,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value!.isEmpty || !value.contains('@')) {
-                        return 'Please Enter a valid email address';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Email Address",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
+                    const SizedBox(
+                      height: 50,
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                    controller: emailController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: "Enter Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.blue,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                      ),
-                    ),
-                    obscureText: _obscurePassword,
-                    controller: passwordController,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  _isLoading == true
-                      ? const CircularProgressIndicator(
-                          color: Colors.blue,
-                        )
-                      : SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.blue,
+                    _isLoading == true
+                        ? const CircularProgressIndicator(
+                            color: Colors.blue,
+                          )
+                        : SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Colors.blue,
+                                ),
                               ),
-                            ),
-                            onPressed: emailController.text.isEmpty |
-                                    passwordController.text.isEmpty
-                                ? null
-                                : () {
-                                    final email = (emailController).text;
-                                    final password = (passwordController).text;
-                                    _submitForm(email, password, context);
-                                  },
-                            child: Text(
-                              "Login",
-                              style: GoogleFonts.lato(
-                                textStyle: const TextStyle(
-                                  letterSpacing: .16,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
+                              onPressed: emailController.text.isEmpty |
+                                      passwordController.text.isEmpty
+                                  ? null
+                                  : () {
+                                      final email = (emailController).text;
+                                      final password =
+                                          (passwordController).text;
+                                      _submitForm(email, password, context);
+                                    },
+                              child: Text(
+                                "Login",
+                                style: GoogleFonts.lato(
+                                  textStyle: const TextStyle(
+                                    letterSpacing: .16,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Dont have an account?",
-                        style: GoogleFonts.lato(
-                          textStyle: const TextStyle(
-                            letterSpacing: .5,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          "Sign up",
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Dont have an account?",
                           style: GoogleFonts.lato(
                             textStyle: const TextStyle(
                               letterSpacing: .5,
@@ -238,10 +199,24 @@ class LoginFormState extends State<LoginForm> {
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "Sign up",
+                            style: GoogleFonts.lato(
+                              textStyle: const TextStyle(
+                                letterSpacing: .5,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

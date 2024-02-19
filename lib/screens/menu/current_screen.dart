@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:jokes_ai_app/screens/joke_screen/joke_screen.dart';
+// import 'package:jokes_ai_app/screens/settings/settings_screen.dart';
 
 class CurrentScreen extends StatelessWidget {
   const CurrentScreen({
@@ -12,7 +13,6 @@ class CurrentScreen extends StatelessWidget {
     required this.closeDrawer,
     required this.openDrawer,
     required this.selectedJokeId,
-    required this.showJoke,
   });
   final String selectedJokeId;
   final bool isDrawerOpen;
@@ -21,7 +21,6 @@ class CurrentScreen extends StatelessWidget {
   final double xOffset;
   final double yOffset;
   final double scaleFactor;
-  final bool showJoke;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,13 @@ class CurrentScreen extends StatelessWidget {
           absorbing: isDrawerOpen,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(isDrawerOpen ? 25 : 0),
-            child: ChatScreen(
+            child:
+                // SettingsScreen(
+                //   openDrawer: openDrawer,
+                //   closeDrawer: closeDrawer,
+                //   isDrawerOpen: isDrawerOpen,
+                // )
+                JokeScreen(
               openDrawer: openDrawer,
               closeDrawer: closeDrawer,
               isDrawerOpen: isDrawerOpen,

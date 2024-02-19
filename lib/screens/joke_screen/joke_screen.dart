@@ -6,8 +6,8 @@ import 'package:jokes_ai_app/widgets/welcome_template.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 import 'package:provider/provider.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({
+class JokeScreen extends StatelessWidget {
+  const JokeScreen({
     super.key,
     required this.openDrawer,
     required this.closeDrawer,
@@ -24,79 +24,86 @@ class ChatScreen extends StatelessWidget {
     bool isTyping = Provider.of<ChatsProvider>(context).isTyping;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.grey[100],
-                      ),
-                      padding: const EdgeInsets.all(4.0),
-                      child: IconButton(
-                        icon: const Icon(Icons.menu),
-                        onPressed: isDrawerOpen ? closeDrawer : openDrawer,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                chat.messages!.isEmpty
-                    ? const Expanded(
-                        child: SingleChildScrollView(
-                          child: WelcomeTemplate(),
-                        ),
-                      )
-                    : Expanded(
-                        child: Messages(
-                          id: selectedJokeId,
-                          chat: chat,
-                        ),
-                      ),
-                if (isTyping)
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage("assets/images/background1.png"),
+          )),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: JumpingDots(
-                          color: Colors.blue,
-                          radius: 10,
-                          numberOfDots: 3,
-                          animationDuration: const Duration(
-                            milliseconds: 200,
-                          ),
-                          verticalOffset: 6,
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.grey[100],
                         ),
+                        padding: const EdgeInsets.all(4.0),
+                        child: IconButton(
+                          icon: Image.asset("assets/icons/menu.png"),
+                          onPressed: isDrawerOpen ? closeDrawer : openDrawer,
+                        ),
+                      ),
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage("assets/images/bot2.jpg"),
                       ),
                     ],
                   ),
-                Container(
-                  height: 60,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  chat.messages!.isEmpty
+                      ? const Expanded(
+                          child: SingleChildScrollView(
+                            child: WelcomeTemplate(),
+                          ),
+                        )
+                      : Expanded(
+                          child: Messages(
+                            id: selectedJokeId,
+                            chat: chat,
+                          ),
+                        ),
+                  if (isTyping)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: JumpingDots(
+                            color: Colors.blue,
+                            radius: 10,
+                            numberOfDots: 3,
+                            animationDuration: const Duration(
+                              milliseconds: 200,
+                            ),
+                            verticalOffset: 6,
+                          ),
+                        ),
+                      ],
+                    ),
+                  Container(
+                    height: 60,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1,
+                      ),
+                    ),
+                    child: NewMessage(
+                      chatId: selectedJokeId,
                     ),
                   ),
-                  child: NewMessage(
-                    chatId: selectedJokeId,
-                  ),
-                ),
-              ]),
+                ]),
+          ),
         ),
       ),
     );
